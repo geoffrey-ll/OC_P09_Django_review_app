@@ -10,24 +10,26 @@ from django.shortcuts import render
 from . import forms, models
 
 
-# Manque le tri par date décroissante…
+# tickets et reviews sont ordonés, mais toujours distincts.
 @login_required
 def flux(request):
     # Pourquoi ce soulignement ?
     # Pourtant cela marche…
-    tickets = models.Ticket.objects.all()
-    reviews = models.Review.objects.all()
+    tickets = models.Ticket.objects.all().order_by("-time_created")
+    reviews = models.Review.objects.all().order_by("-time_created")
     # flux = sorted(tickets, key="time_created", reverse=True)
     # print(flux)
     return render(request, "reviews/flux.html", context={"tickets": tickets,
                                                          "reviews": reviews})
 
 
-# Manque le tri par date décroissante…
+# tickets et reviews sont ordonés, mais toujours distincts.
 @login_required
 def flux_user(request):
-    tickets_user = models.Ticket.objects.filter(Q(user=request.user))
-    reviews_user = models.Review.objects.filter(Q(user=request.user))
+    tickets_user = models.Ticket.objects\
+        .filter(Q(user=request.user)).order_by("-time_created")
+    reviews_user = models.Review.objects\
+        .filter(Q(user=request.user)).order_by("-time_created")
     return render(request, "reviews/flux.html",
                   context={"tickets": tickets_user, "reviews": reviews_user})
 
