@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
+from django.conf import settings
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -8,7 +10,7 @@ from django.shortcuts import render
 from . import forms, models
 
 
-# Create your views here.
+# Manque le tri par date décroissante…
 @login_required
 def flux(request):
     # Pourquoi ce soulignement ?
@@ -19,6 +21,15 @@ def flux(request):
     # print(flux)
     return render(request, "reviews/flux.html", context={"tickets": tickets,
                                                          "reviews": reviews})
+
+
+# Manque le tri par date décroissante…
+@login_required
+def flux_user(request):
+    tickets_user = models.Ticket.objects.filter(Q(user=request.user))
+    reviews_user = models.Review.objects.filter(Q(user=request.user))
+    return render(request, "reviews/flux.html",
+                  context={"tickets": tickets_user, "reviews": reviews_user})
 
 
 @login_required
