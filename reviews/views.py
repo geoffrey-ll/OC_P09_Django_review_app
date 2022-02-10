@@ -5,33 +5,30 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
+from itertools import chain
 
 
 from . import forms, models
 
 
-# tickets et reviews sont ordonés, mais toujours distincts.
 @login_required
 def flux(request):
     # Pourquoi ce soulignement ?
     # Pourtant cela marche…
-    tickets = models.Ticket.objects.all().order_by("-time_created")
-    reviews = models.Review.objects.all().order_by("-time_created")
-    # flux = sorted(tickets, key="time_created", reverse=True)
-    # print(flux)
-    return render(request, "reviews/flux.html", context={"tickets": tickets,
-                                                         "reviews": reviews})
+    tickets = models.Ticket.objects.all()
+    reviews = models.Review.objects.all()
+    flux = sorted(chain(tickets, reviews),
+                  key=lambda instance: instance.time_created, reverse=True)
+    return render(request, "reviews/flux.html", context={"flux": flux})
 
 
-# tickets et reviews sont ordonés, mais toujours distincts.
 @login_required
 def flux_user(request):
-    tickets_user = models.Ticket.objects\
-        .filter(Q(user=request.user)).order_by("-time_created")
-    reviews_user = models.Review.objects\
-        .filter(Q(user=request.user)).order_by("-time_created")
-    return render(request, "reviews/flux.html",
-                  context={"tickets": tickets_user, "reviews": reviews_user})
+    tickets_user = models.Ticket.objects.filter(Q(user=request.user))
+    reviews_user = models.Review.objects.filter(Q(user=request.user))
+    flux = sorted(chain(tickets_user, reviews_user),
+                  key=lambda instance: instance.time_created, reverse=True)
+    return render(request, "reviews/flux.html", context={"flux": flux})
 
 
 @login_required

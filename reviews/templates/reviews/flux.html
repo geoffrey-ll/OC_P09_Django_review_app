@@ -2,14 +2,16 @@
 
 {% block content %}
 
-  <h2>TICKETS !!!</h2>
-  {% for ticket in tickets %}
-    <img src="{{ ticket.image.url }}">
-    <p>{{ ticket.title }}</p>
+  <h2>Flux général</h2>
+  {% for post in flux %}
+    {% if post.image %}
+      <p>{{ post.title }}</p>
+      <img src="{{ post.image.url }}">
+    {% else %}
+      <p>{{ post }}</p>
+    {% endif %}
   {% endfor %}
 
-  <h2>REVIEWS !!!!</h2>
-  {% for review in reviews %}
-    {{ review }}
-  {% endfor %}
+
+
 {% endblock %}
