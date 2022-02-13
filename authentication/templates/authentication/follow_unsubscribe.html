@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="flexbox-center flex-column margin-top">
+    <p class="text-center">
+      Veuillez confirmer le désabonnement à <strong>{{ follower_name }}</strong>
+    </p>
+    <form class="flexbox-center" action="" method="post">
+      {% csrf_token %}
+      <input class="generic-buttonn" type="submit" value="Désabonner">
+    </form>
+    
+    <a href="{% url 'follow-user' %}">Annuler</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Suivre d'autres utilisateurs</h2>
+  <p>Futur champ de recherche d'utilisateurs</p>
+
+  <h2>Abonnements</h2>
+  <table class="follow-container">
+    {% for relation_user in relations_user %}
+      {% firstof relation_user.followed_user as follower_name %}
+      <tr>
+        <td class="follow-cell follow-name">{{ follower_name }}</td>
+        <td class="follow-cell follow-button-container">
+          <a class="follow-a-button" 
+          href="{% url 'follow-unsubscribe' relation_user.id follower_name %}">
+              <button class="follow-buttonn">Désabonner</button>
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Abonnés</h2>
+  <table class="follow-container">
+    {% for following_user in following_users %}
+      <tr>
+        <td class="follow-cell follow-name">{{ following_user.user }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

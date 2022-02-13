@@ -10,7 +10,7 @@ class Ticket(models.Model):
     description = models.TextField(max_length=2_048, blank=True)
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True, upload_to="ticket_images")
     time_created = models.DateTimeField(auto_now_add=True)
 
     IMAGE_MAX_SIZE = (120, 160) # (largeur, hauteur)
@@ -24,6 +24,9 @@ class Ticket(models.Model):
         super().save(*args, **kwargs)
         self._resize_image()
 
+    def __str__(self):
+        return self.title
+
 
 class Review(models.Model):
     ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE)
@@ -36,3 +39,6 @@ class Review(models.Model):
     body = models.TextField(max_length=8_192, blank=True)
 
     time_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.headline

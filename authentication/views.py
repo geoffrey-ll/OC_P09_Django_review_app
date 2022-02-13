@@ -4,12 +4,14 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.generic import View   # a ajouter
 
 
 from .forms import SignupForm
+from . import models
 # from .forms import LoginForm
 
 
@@ -33,53 +35,27 @@ def signup(request):
 
 
 @login_required
-def flux(request,):
-    return render(request, "authentication/flux.html")
+def follow_user(request):
+    # Ceux suivit par l'user
+    relations_user = \
+        models.UserFollows.objects.filter(Q(user=request.user))
+    # Ceux qui suivent l'user
+    following_users = \
+        models.UserFollows.objects.filter(Q(followed_user=request.user))
+
+    return render(request, "authentication/follow_user.html",
+                  context={"relations_user": relations_user,
+                           "following_users": following_users})
 
 
-# class LoginPage(View):  # AJOUTER VIEW
-#     form_class = LoginForm
-#     template_name = "authentication/login.html"
-#
-#     def get(self, request):
-#         form = self.form_class()
-#         message = ''
-#         render(request, self.template_name, context={"form": form,
-#                                                      "message": message})
-#
-#     def post(self, request):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             user = authenticate(username=form.cleaned_data["username"],
-#                                 password=form.cleaned_data["password"])
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect(settings.LOGIN_REDIRECT_URL)
-
-# def login_view(request):
-#     form = LoginForm()
-#     message = ""
-#     if request.method == "POST":
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             user = authenticate(username=form.cleaned_data["username"],
-#                                 password=form.cleaned_data["password"])
-#             if user is not None:
-#                 login(request, user)
-#                 # éventuellement placer un bonjour machin dans page de redirection.
-#                 return redirect(settings.LOGIN_REDIRECT_URL)
-#             else:
-#                 message = no_valid_login()
-#     return render(request, "authentication/login.html",
-#                   context={"form": form, "message": message})
-#
-#
-# def logout_view(request):
-#     logout(request)
-#     return redirect(settings.LOGOUT_REDIRECT_URL)
-#
-#
-# def no_valid_login():
-#     return "Identifiants invalides."
-
-
+@login_required
+def follow_unsubscribe(request, relation_id, follower_name):
+    follow_unsubscribe = models.UserFollows.objects.get(id=relation_id)
+    if follow_unsubscribe.user == request.user:
+        if request.method == "POST":
+            follow_unsubscribe.delete()
+            return redirect("follow-user")
+    else:
+        return redirect("follow-user")
+    return render(request, "authentication/follow_unsubscribe.html",
+                  context={"follower_name": follower_name})
