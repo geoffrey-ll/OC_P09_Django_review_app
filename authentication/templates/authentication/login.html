@@ -3,32 +3,10 @@
 {% block content %}
 
 <div class="flexbox-spacearound-center">
-  <div class="flex-column flexbox-center">
-    <h2>Inscrivez-vous maintenant</h2>
-    <a href="{% url 'signup' %}">
-      <input class="fields-margin generic-buttonn" type="button" value="S'inscrire">
-    </a>
-  </div>
+  {% include 'authentication/login_form_snippet.html' %}
 
-  <div>
-    <h2>Connexion</h2>
-    {% if form.errors %}
-      {{ form.errors }}
-    {% endif %}
+  {% include 'authentication/signup_link_snippet.html' %}
 
-    <div class="flexbox-center fields-size">
-      <form class="flexbox-center flex-column size" action="" method="post">
-        {% csrf_token %}
-        {% for field in form %}
-          {{ field }}
-        {% endfor %}
-
-        <div class="flexbox-right">
-          <input class="fields-margin generic-buttonn" type="submit" value="Se connecter">
-        </div>
-      </form>
-    </div>
-  </div>
 </div>
 
 {% endblock %}

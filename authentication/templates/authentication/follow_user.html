@@ -2,8 +2,14 @@
 
 {% block content %}
   <h2>Suivre d'autres utilisateurs</h2>
-  <p>Futur champ de recherche d'utilisateurs</p>
-
+  <form method="POST">
+    {% csrf_token %}
+    <table>
+      {{ form }}
+    </table>    
+    <input type="submit" value="M'abonner" class="btn btn-success">
+  </form>
+  
   <h2>Abonnements</h2>
   <table class="follow-container">
     {% for relation_user in relations_user %}

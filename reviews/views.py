@@ -13,8 +13,7 @@ from . import forms, models
 
 @login_required
 def flux(request):
-    # Pourquoi ce soulignement ?
-    # Pourtant cela marche…
+    # Ne mettre que les posts des user
     tickets = models.Ticket.objects.all()
     reviews = models.Review.objects.all()
     flux = sorted(chain(tickets, reviews),
@@ -36,10 +35,11 @@ def ticked_upload(request):
     form = forms.TicketForm()
     if request.method == "POST":
         form = forms.TicketForm(request.POST, request.FILES)
-        ticket = form.save(commit=False)
-        ticket.user = request.user
-        ticket.save()
-        return redirect("flux")
+        if form.is_valid():
+            ticket = form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+            return redirect("flux")
     return render(request, "reviews/ticket_upload.html",
                   context={"form": form})
 

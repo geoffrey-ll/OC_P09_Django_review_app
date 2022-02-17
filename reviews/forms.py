@@ -10,14 +10,14 @@ class TicketForm(forms.ModelForm):
         model = models.Ticket
         fields = ["title", "description", "image"]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs.update({
-
-            "placeholder": "Titre"})
-
-        self.fields['description'].widget.attrs.update({
-            "placeholder": 'Écrivez une description'})
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['title'].widget.attrs.update({
+    #
+    #         "placeholder": "Titre"})
+    #
+    #     self.fields['description'].widget.attrs.update({
+    #         "placeholder": 'Écrivez une description'})
 
 
 class ReviewForm(forms.ModelForm):
