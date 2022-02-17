@@ -19,12 +19,12 @@ from django.contrib import admin
 from django.urls import path, include
 
 
-from authentication.views import index
+from authentication.views import login_view
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", index, name="index"),
+    path("", login_view, name="home-page"),
     path("accounts/", include("authentication.urls")),
     path("flux/", include("reviews.urls")),
 ]

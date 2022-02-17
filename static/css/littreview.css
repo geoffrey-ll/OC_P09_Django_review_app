@@ -14,6 +14,11 @@ a {
     text-align: center;
 }
 
+a.generic-buttonn {
+    color: black;
+    text-align: center;
+}
+
 .text-center {
     text-align: center;
 }
@@ -21,6 +26,12 @@ a {
 .flexbox-center {
     display: flex;
     justify-content: center;
+}
+
+.flexbox-spacearound-center {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .flex-column {
@@ -66,4 +77,18 @@ a {
 .follow-a-button {
     text-decoration: none;
     width: 110px;
+}
+
+/* formulaire */
+.size {
+    width: 320px;
+}
+
+.flexbox-right {
+    display: flex;
+    justify-content: right;
+}
+
+.fields-margin {
+    margin: 10px;
 }

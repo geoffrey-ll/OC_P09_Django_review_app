@@ -6,18 +6,25 @@ from django.contrib.auth.views import PasswordChangeDoneView    # A AJOUTER
 from django.conf import settings
 
 
+from .views import login_view
+# from .forms import LoginForm
 from .views import signup
 from .views import follow_user
 from .views import follow_unsubscribe
 
+from .forms import SignupForm
+
 
 urlpatterns = [
     path("signup/", signup, name="signup"),
-    path("login/",
-         LoginView.as_view(
-             template_name="authentication/login.html",
-             redirect_authenticated_user=True),
-         name="login"),
+    # path("login/",
+    #      LoginView.as_view(
+    #          template_name="authentication/login.html",
+    #          redirect_authenticated_user=True,
+    #          form=LoginForm()
+    #      ),
+    #      name="login"),
+    path("login/", login_view, name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("password_change/",
          PasswordChangeView.as_view(
