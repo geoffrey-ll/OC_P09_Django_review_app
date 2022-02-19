@@ -2,6 +2,7 @@ from django.urls import path
 from django.contrib.auth.views import LoginView     # A AJOUTER
 from django.contrib.auth.views import LogoutView   # A AJOUTER
 from django.contrib.auth.views import PasswordChangeView    # A AJOUTER
+from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth.views import PasswordChangeDoneView    # A AJOUTER
 from django.conf import settings
 
@@ -13,6 +14,8 @@ from .views import follow_user
 from .views import follow_unsubscribe
 
 from .forms import SignupForm
+
+from .views import PasswordResetViewOverride
 
 
 urlpatterns = [

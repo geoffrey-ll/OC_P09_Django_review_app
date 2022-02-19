@@ -1,0 +1,14 @@
+<div class="borderr flux-content-container
+{% if option == 'interlock' %} flux-content-interlock{% endif %}">
+  <div class="flux-content-first-line">
+    <p><strong>{{ post.user }}</strong> a demandé une critique</p>
+    <p>{{ post.time_created }}</p>
+  </div>
+  <p>{{ post.title }}</p>
+  {% if post.description %}
+    <p>{{ post.description }}</p>
+  {% endif %}
+  {% if post.image %}
+    <img src="{{ post.image.url }}" alt="{{ post.image.name }}">
+  {% endif %}
+</div>

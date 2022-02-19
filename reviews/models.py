@@ -22,10 +22,14 @@ class Ticket(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self._resize_image()
+        if self.image:
+            self._resize_image()
 
     def __str__(self):
-        return self.title
+        return f"""{self.user} a demandé une critique\n
+                {self.title}\n
+                {self.description}
+                """
 
 
 class Review(models.Model):

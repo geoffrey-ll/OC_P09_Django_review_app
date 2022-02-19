@@ -7,8 +7,8 @@
   {{ form.errors }}
 {% endif %}
 
-<div class="flexbox-center fields-size">
-  <form class="flexbox-center flex-column size" action="" method="post">
+<div class="flexbox-center">
+  <form class="flexbox-center flex-column size-little-fields" method="post">
     {% csrf_token %}
     {% for field in form %}
       {{ field }}
@@ -18,8 +18,6 @@
       <a href="{% url 'home-page' %}" type="button">
         <input class="fields-margin generic-buttonn" type="button" value="Retourner">
       </a>
-      <!--<a class="fields-margin generic-buttonn" href="{% url 'home-page' %}" type="button">Retourner</a>-->
-      <!--<input class="fields-margin generic-buttonn" type="button" value="Retourner" onclick="{% url 'home-page' %}">-->
       <input class="fields-margin generic-buttonn" type="submit" value="S'inscrire">
     </div>
   </form>

@@ -9,12 +9,18 @@ from itertools import chain
 
 
 from . import forms, models
+from authentication import models as models_auth
 
 
 @login_required
 def flux(request):
-    # Ne mettre que les posts des user
-    tickets = models.Ticket.objects.all()
+    # Ses posts + posts des user suivis + reviews même si non suivi
+    # tickets = []
+    relations_user = models_auth.UserFollows.objects.filter(Q(user=request.user))
+    tickets = models.Ticket.objects.filter(Q(user=request.user))
+    # for user in relations_user:
+    #     tickets.append(models.Ticket.objects.filter(Q(user=user)))
+    # tickets_followed = models.Ticket.objects.filter(Q(user=followed_user for followed_user in relations_user))
     reviews = models.Review.objects.all()
     flux = sorted(chain(tickets, reviews),
                   key=lambda instance: instance.time_created, reverse=True)
@@ -27,6 +33,7 @@ def flux_user(request):
     reviews_user = models.Review.objects.filter(Q(user=request.user))
     flux = sorted(chain(tickets_user, reviews_user),
                   key=lambda instance: instance.time_created, reverse=True)
+    print(f"\n{type(flux)}")
     return render(request, "reviews/flux.html", context={"flux": flux})
 
 
@@ -48,9 +55,10 @@ def ticked_upload(request):
 def review_upload(request):
     form = forms.ReviewForm()
     if request.method == "POST":
-        form = forms.ReviewForm(request.POST, request.FILES)
-        if form.is_valid():
-            review = form.save(commit=False)
+        formreview = forms.ReviewForm(request.POST, request.FILES)
+
+        if form.is_valid() & formreview.is_valid():
+            review = formreview.save(commit=False)
             review.user = request.user
             review.save()
             return redirect("flux")

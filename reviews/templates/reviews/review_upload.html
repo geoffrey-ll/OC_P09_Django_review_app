@@ -2,12 +2,30 @@
 
 {% block content %}
 
-  <form method="post" enctype="mutipart/form-data">
+  <h2>Créer une critique</h2>
+  <div class="">
+    <p>Livre / Article</p>
+      {% include "reviews/ticket_form_snippet.html" with option="test" form=formticket %}
+  </div>
+  <form class="flexbox-center flex-column" method="post" enctype="mutipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    
+    {% for field in form %}
+      {% if field.label_tag == "Ticket :" %}
+        <p>Je suis là</p>
+      {% endif %}
+      {{ field.label_tag }}
+      {{ field }}
+    {% endfor %}
 
-    <!--<input type="submit" value="Annuler" href="{% url 'flux' %}">-->
-    <input type="submit" value="Envoyer">
+    <div class="to-right">
+      <input class="button-margin-right generic-buttonn" type="submit" value="Publier">
+    </div>
   </form>
 
+  <div class="to-right">
+    <a href="{% url 'flux' %}">
+      <input class="button-margin-right generic-buttonn" type="submit" value="Annuler">
+    </a>
+  </div>
 {% endblock %}

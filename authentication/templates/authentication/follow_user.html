@@ -1,14 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
+
   <h2>Suivre d'autres utilisateurs</h2>
-  <form method="POST">
-    {% csrf_token %}
-    <table>
-      {{ form }}
-    </table>    
-    <input type="submit" value="M'abonner" class="btn btn-success">
-  </form>
+  <div class="flexbox-center">
+    <form class="size-search-container" method="POST">
+      {% csrf_token %}
+      {% if message %}
+        <p class="size-search-container">{{ message }}</p>
+      {% endif %}
+      <table>
+        <tr>
+          <td class="size-search-field">{{ form.username }}</td>
+          <td>
+            <input class="fields-margin generic-buttonn" type="submit" value="Envoyer">
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
   
   <h2>Abonnements</h2>
   <table class="follow-container">
@@ -34,4 +44,5 @@
       </tr>
     {% endfor %}
   </table>
+
 {% endblock %}
