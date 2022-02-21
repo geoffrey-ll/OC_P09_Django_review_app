@@ -19,19 +19,17 @@ class TicketForm(forms.ModelForm):
         fields = ["title", "description", "image"]
 
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         fields_attribute(self.fields, self.label_fields)
 
 
-
 class ReviewForm(forms.ModelForm):
-    label_fields = ["", "Titre", "Note", "Commentaire"]
+    label_fields = ["Titre", "Note", "Commentaire"]
 
     class Meta:
         model = models.Review
-        fields = ["ticket", "headline", "rating", "body"]
+        fields = ["headline", "rating", "body"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

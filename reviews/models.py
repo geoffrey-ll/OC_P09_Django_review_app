@@ -26,10 +26,9 @@ class Ticket(models.Model):
             self._resize_image()
 
     def __str__(self):
-        return f"""{self.user} a demandé une critique\n
-                {self.title}\n
-                {self.description}
-                """
+        return f"{self.user} a demandé une critique\n" \
+               f"{self.title}\n" \
+               f"{self.description}"
 
 
 class Review(models.Model):

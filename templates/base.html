@@ -37,14 +37,9 @@
           <a class="nav.item nav-link active" href="{% url 'flux' %}">
             Flux
           </a>
-          <a class="nav-link active dropdown-toggle" href="" data-bs-toggle="dropdown">
+          <a class="nav.item nav-link active" href="{% url 'flux-user' %}">
             Posts
           </a>
-          <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item text-right" href="{% url 'flux-user' %}">Mes posts</a>
-            <a class="dropdown-item text-right" href="{% url 'ticket-upload' %}">Ticket</a>
-            <a class="dropdown-item text-right" href="{% url 'review-upload' %}">Review</a>
-          </div>
           
           <a class="nav.item nav-link active" href="{% url 'follow-user' %}">
             Abonnements

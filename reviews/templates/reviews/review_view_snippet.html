@@ -1,6 +1,6 @@
 <div class="borderr flux-content-container">
   <div class="flux-content-first-line">
-    <p><strong>{{ post.user }}</strong> a publier une critique</p>
+    <p><strong>{{ post.user }}</strong> a publié une critique</p>
     <p>{{ post.time_created }}</p>
   </div>
   <div>
@@ -11,9 +11,7 @@
     {{ post.body }}
   {% endif %}
   <div class="flux-content-container-interlock">
-    {% include 'reviews/ticket_view_snippet.html' with post=post.ticket option='interlock' %}
+    {% include 'reviews/ticket_view_snippet.html' with post=post.ticket option="interlock" %}
   </div>
-
-
 
 </div>

@@ -19,6 +19,7 @@ from django.urls import path
 from reviews.views import ticked_upload
 from reviews.views import ticket_edit
 from reviews.views import review_upload
+from reviews.views import ticket_answer
 from reviews.views import review_edit
 from reviews.views import flux
 from reviews.views import flux_user
@@ -30,5 +31,7 @@ urlpatterns = [
     path("ticket_upload", ticked_upload, name="ticket-upload"),
     path("tickets/<int:ticket_id>", ticket_edit, name="ticket-edit"),
     path("review_upload", review_upload, name="review-upload"),
+    path("review_upload/ticket/<int:ticket_id>", ticket_answer,
+         name="ticket-answer"),
     path("reviews/<int:review_id>", review_edit, name="review-edit"),
 ]

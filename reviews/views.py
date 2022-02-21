@@ -16,7 +16,7 @@ from authentication import models as models_auth
 def flux(request):
     # Ses posts + posts des user suivis + reviews même si non suivi
     # tickets = []
-    relations_user = models_auth.UserFollows.objects.filter(Q(user=request.user))
+    # relations_user = models_auth.UserFollows.objects.filter(Q(user=request.user))
     tickets = models.Ticket.objects.filter(Q(user=request.user))
     # for user in relations_user:
     #     tickets.append(models.Ticket.objects.filter(Q(user=user)))
@@ -53,17 +53,39 @@ def ticked_upload(request):
 
 @login_required
 def review_upload(request):
-    form = forms.ReviewForm()
+    form_review = forms.ReviewForm()
+    form_ticket= forms.TicketForm()
     if request.method == "POST":
-        formreview = forms.ReviewForm(request.POST, request.FILES)
-
-        if form.is_valid() & formreview.is_valid():
-            review = formreview.save(commit=False)
+        form_review = forms.ReviewForm(request.POST, request.FILES)
+        form_ticket = forms.TicketForm(request.POST, request.FILES)
+        if form_review.is_valid() and form_ticket.is_valid():
+            ticket = form_ticket.save(commit=False)
+            ticket.user = request.user
+            review = form_review.save(commit=False)
             review.user = request.user
+            review.ticket = ticket
+            ticket.save()
             review.save()
             return redirect("flux")
     return render(request, "reviews/review_upload.html",
-                  context={"form": form})
+                  context={"form_review": form_review,
+                           "form_ticket": form_ticket})
+
+
+def ticket_answer(request, ticket_id):
+    form = forms.ReviewForm()
+    ticket = models.Ticket.objects.get(id=ticket_id)
+    if request.method == "POST":
+        form = forms.ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.ticket = ticket
+            review.user = request.user
+            review.save()
+            return redirect("flux")
+    return render(request, "reviews/ticket_answer.html",
+                  context={"form": form,
+                           "post": ticket})
 
 
 # Un décorateur pour permettre l'accès qu'a son auteur ?

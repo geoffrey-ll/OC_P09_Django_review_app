@@ -53,6 +53,7 @@ def login_view(request):
             user = authenticate(
                 username=form.cleaned_data["username"],
                 password=form.cleaned_data["password"])
+            print(f"\nJe suis user authentifier {user}\n")
             if user is not None:
                 login(request, user)
                 return redirect(settings.LOGIN_REDIRECT_URL)

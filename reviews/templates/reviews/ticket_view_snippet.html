@@ -1,14 +1,30 @@
 <div class="borderr flux-content-container
-{% if option == 'interlock' %} flux-content-interlock{% endif %}">
+{% if option == 'interlock' %} flux-content-interlock{% endif %}
+{% if option == 'ticket-answer' %} content-ticket-answer{% endif %}">
   <div class="flux-content-first-line">
-    <p><strong>{{ post.user }}</strong> a demandé une critique</p>
-    <p>{{ post.time_created }}</p>
+    {% if option == "interlock" %}
+      <p>Ticket - <strong>{{ post.user }}</strong></p>
+    {% else %}
+      <p><strong>{{ post.user }}</strong> a demandé une critique</p>
+      <p>{{ post.time_created }}</p>
+    {% endif %}
   </div>
   <p>{{ post.title }}</p>
   {% if post.description %}
-    <p>{{ post.description }}</p>
+    {% if option != "interlock" %}
+      <p>{{ post.description }}</p>
+    {% endif %}
   {% endif %}
   {% if post.image %}
-    <img src="{{ post.image.url }}" alt="{{ post.image.name }}">
+    <div class="margin-left-20">
+      <img src="{{ post.image.url }}" alt="Image inexistante">
+    </div>
+  {% endif %}
+  {% if not option %}
+    <div class="flex-button-ticket">
+      <a class="fields-margin" href="{% url 'ticket-answer' post.id %}">
+        <input class="generic-buttonn to-right" type="submit" value="Crée une critique">
+      </a>
+    </div>
   {% endif %}
 </div>

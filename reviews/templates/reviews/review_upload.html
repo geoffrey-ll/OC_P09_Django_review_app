@@ -2,30 +2,38 @@
 
 {% block content %}
 
-  <h2>Créer une critique</h2>
-  <div class="">
+<h2>Créer une critique</h2>
+
+<form class="flexbox-center flex-column no-margin" method="post" enctype="mutipart/form-data">
+  {% csrf_token %}
+  <div class="separate-form">
     <p>Livre / Article</p>
-      {% include "reviews/ticket_form_snippet.html" with option="test" form=formticket %}
+    <div class="flexbox-center flex-column">
+      {% for field in form_ticket %}
+        {{ field.label_tag }}
+        {{ field }}
+      {% endfor %}
+    </div>
   </div>
-  <form class="flexbox-center flex-column" method="post" enctype="mutipart/form-data">
-    {% csrf_token %}
-    
-    {% for field in form %}
-      {% if field.label_tag == "Ticket :" %}
-        <p>Je suis là</p>
-      {% endif %}
-      {{ field.label_tag }}
-      {{ field }}
-    {% endfor %}
+  
+  <div class="separate-form border-top-none">
+    <p>Critique</p>
+    <div class="flexbox-center flex-column">
+      {% for field in form_review %}
+        {{ field.label_tag }}
+        {{ field }}
+      {% endfor %}
+    </div>
 
     <div class="to-right">
-      <input class="button-margin-right generic-buttonn" type="submit" value="Publier">
+      <input class="generic-buttonn margin-10" type="submit" value="Envoyer">
     </div>
+  </div>
   </form>
 
-  <div class="to-right">
-    <a href="{% url 'flux' %}">
-      <input class="button-margin-right generic-buttonn" type="submit" value="Annuler">
-    </a>
-  </div>
+<div class="to-right">
+  <a href="{% url 'flux' %}">
+    <input class="generic-buttonn button-back" type="submit" value="Annuler">
+  </a>
+</div>
 {% endblock %}

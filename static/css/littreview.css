@@ -61,7 +61,7 @@ input:-moz-placeholder { text-align: center; }
 }
 
 .follow-cell {
-    border: 1px solid black;
+    border: 2px solid black;
 }
 
 .follow-name {
@@ -161,4 +161,43 @@ input:-moz-placeholder { text-align: center; }
 
 .hidden {
     display: none;
+}
+
+.flex-button-ticket {
+    display: flex;
+    justify-content: right;
+}
+
+.separate-form {
+    min-width: 500px;
+    border: 2px solid #7fb5e5;
+    border-collapse: collapse;
+    padding: 10px;
+}
+
+.border-top-none {
+    border-top: none;
+    margin-bottom: 15px;
+}
+
+.content-ticket-answer {
+    width: 85%;
+    min-width: 476px;
+}
+
+.no-margin {
+    margin: 0px;
+}
+
+.margin-10 {
+    margin: 10px;
+}
+
+.button-back {
+    margin: 10px;
+    margin-right: 20px;
+}
+
+.margin-left-20 {
+    margin-left: 20px;
 }

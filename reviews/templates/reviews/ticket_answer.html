@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Créer une critique</h2>
+<div class="flexbox-center flex-column">
+  <div class="separate-form">
+    <p>Vous êtes en train de poster en réponse à</p>
+    <div class="flexbox-center">
+      {% include "reviews/ticket_view_snippet.html" with option="ticket-answer" %}
+    </div>
+  </div>
+
+  <div class="separate-form border-top-none">
+    <p>Critique</p>
+    <form class="flexbox-center flex-column no-margin" method="post" enctype="mutipart/form-data">
+      {% csrf_token %}
+      
+      {% for field in form %}
+        {% if field.label_tag == "Ticket :" %}
+          <p>Je suis là</p>
+        {% endif %}
+        {{ field.label_tag }}
+        {{ field }}
+      {% endfor %}
+
+      <div class="to-right">
+        <input class="button-margin-right generic-buttonn margin-10" type="submit" value="Envoyer">
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="to-right">
+  <a href="{% url 'flux' %}">
+    <input class="button-margin-right generic-buttonn button-back" type="submit" value="Annuler">
+  </a>
+</div>
+{% endblock %}
