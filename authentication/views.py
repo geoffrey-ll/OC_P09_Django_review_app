@@ -11,6 +11,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.generic import View   # a ajouter
 from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.views import PasswordChangeView
 
 
 from .forms import SignupForm
@@ -18,27 +19,41 @@ from .forms import LoginForm
 from . import models
 from .forms import FollowForm
 
-from .forms import PasswordResetFormOverride
+from .forms import PasswordResetForm
+from .forms import PasswordChangeFormOverride
 
+from . import tests
 
 # Create your views here
-class PasswordResetViewOverride(PasswordResetView):
+def password_reset(request):
+    form = PasswordResetForm()
+    message = ''
+    if request.method == "POST":
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            user = tests.user_exist(form.cleaned_data["username"])
+            if user is not None:
+                return redirect("password-change")
+            else:
+                message = "Utilisateur inconnu"
+    return render(request, "authentication/password_reset.html",
+                  context={"form": form,
+                           "message": message})
+
+
+
+class PasswordChangeViewOverride(PasswordChangeView):
     template_name = "authentication/password_change.html"
-    form_class = PasswordResetFormOverride
-
-
+    form_class = PasswordChangeFormOverride
 
 
 def signup(request):
     form = SignupForm()
     if request.method == "POST":
         form = SignupForm(request.POST)
-        print(form)
         if form.is_valid():
             form.save()
-            # Le redirection doit mener vers le flux de l'utilisateur.
-            # A modif dès que le flux est en chantier.
-            return redirect('login')
+            return redirect("login")
     return render(request, "authentication/signup.html",
                   context={"form": form})
 
@@ -58,7 +73,8 @@ def login_view(request):
                 login(request, user)
                 return redirect(settings.LOGIN_REDIRECT_URL)
 
-    return render(request, "authentication/login.html", context={"form": form})
+    return render(request, "authentication/home_page.html",
+                  context={"form": form})
 
 
 @login_required

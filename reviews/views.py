@@ -8,7 +8,7 @@ from django.shortcuts import render
 from itertools import chain
 
 
-from . import forms, models
+from . import forms, models, tests
 from authentication import models as models_auth
 
 
@@ -17,6 +17,7 @@ def flux(request):
     # Ses posts + posts des user suivis + reviews même si non suivi
     # tickets = []
     # relations_user = models_auth.UserFollows.objects.filter(Q(user=request.user))
+    tests.get_users_viewable_reviews(request.user)
     tickets = models.Ticket.objects.filter(Q(user=request.user))
     # for user in relations_user:
     #     tickets.append(models.Ticket.objects.filter(Q(user=user)))
@@ -24,7 +25,7 @@ def flux(request):
     reviews = models.Review.objects.all()
     flux = sorted(chain(tickets, reviews),
                   key=lambda instance: instance.time_created, reverse=True)
-    return render(request, "reviews/flux.html", context={"flux": flux})
+    return render(request, "reviews/flux.html", context={"flux": flux,})
 
 
 @login_required
@@ -33,8 +34,8 @@ def flux_user(request):
     reviews_user = models.Review.objects.filter(Q(user=request.user))
     flux = sorted(chain(tickets_user, reviews_user),
                   key=lambda instance: instance.time_created, reverse=True)
-    print(f"\n{type(flux)}")
-    return render(request, "reviews/flux.html", context={"flux": flux})
+    return render(request, "reviews/flux.html",
+                  context={"flux": flux, "option": "flux-user"})
 
 
 @login_required
@@ -47,7 +48,7 @@ def ticked_upload(request):
             ticket.user = request.user
             ticket.save()
             return redirect("flux")
-    return render(request, "reviews/ticket_upload.html",
+    return render(request, "reviews/ticket_form.html",
                   context={"form": form})
 
 
@@ -92,33 +93,66 @@ def ticket_answer(request, ticket_id):
 # Ajouter {% if perms.reviews.change_ticket %} dans le HTML, là où doit
 # apparaître le boutton de modification.
 @login_required
-@permission_required("reviews.change_ticket", raise_exception=True)
+# @permission_required("reviews.change_ticket", raise_exception=True)
 def ticket_edit(request, ticket_id):
     ticket = get_object_or_404(models.Ticket, id=ticket_id)
     form = forms.TicketForm(instance=ticket)
-    # Un if pour vérifier que user est l'auteur du ticket ?
-    if request.method == "POST":
-        form = forms.TicketForm(request.POST, request.FILES, instance=ticket)
-        if form.is_valid():
-            form.save()
-            return redirect("flux")
-    return render(request, "reviews/ticket_edit.html",
-                  context={"form": form})
+    if ticket.user == request.user:
+        if request.method == "POST":
+            form = forms.TicketForm(request.POST, request.FILES, instance=ticket)
+            if form.is_valid():
+                form.save()
+                return redirect("flux-user")
+    else:
+        return redirect("follow-user")
+    return render(request, "reviews/ticket_form.html",
+                  context={"form": form, "option": "edit"})
 
 
 # Un décorateur pour permettre l'accès qu'a son auteur ?
 # Ajouter {% if perms.reviews.change_review %} dans le HTML, là où doit
 # apparaître le boutton de modification.
 @login_required
-@permission_required("reviews.change_review", raise_exception=True)
+# @permission_required("reviews.change_review", raise_exception=True)
 def review_edit(request, review_id):
     review = get_object_or_404(models.Review, id=review_id)
     form = forms.ReviewForm(instance=review)
+    ticket = models.Ticket.objects.get(id=review.ticket_id)
     # Un if pour vérifier que user est l'auteur de la review ?
-    if request.method == "POST":
-        form = forms.ReviewForm(request.POST, instance=review)
-        if form.is_valid():
-            form.save()
-            return redirect("flux")
-    return render(request, "reviews/review_edit.html",
-                  context={"form": form})
+    if review.user == request.user:
+        if request.method == "POST":
+            form = forms.ReviewForm(request.POST, request.FILES,
+                                    instance=review)
+            if form.is_valid():
+                form.save()
+                return redirect("flux-user")
+    else:
+        return redirect("follow-user")
+    return render(request, "reviews/ticket_answer.html",
+                  context={"form": form, "post": ticket, "option": "edit"})
+
+
+@login_required
+def ticket_delete(request, ticket_id):
+    ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    if ticket.user == request.user:
+        if request.method == "POST":
+            ticket.delete()
+            return redirect("flux-user")
+    else:
+        return redirect("follow-user")
+    return render(request, "reviews/delete_view.html",
+                  context={"post": ticket, "delete": "ticket"})
+
+
+@login_required
+def review_delete(request, review_id):
+    review = get_object_or_404(models.Review, id=review_id)
+    if review.user == request.user:
+        if request.method == "POST":
+            review.delete()
+            return redirect("flux-user")
+    else:
+        return redirect("follow-user")
+    return render(request, "reviews/delete_view.html",
+                  context={"post": review, "delete": "critique"})

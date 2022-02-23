@@ -15,24 +15,16 @@ from .views import follow_unsubscribe
 
 from .forms import SignupForm
 
-from .views import PasswordResetViewOverride
+from .views import password_reset
+from .views import PasswordChangeViewOverride
 
 
 urlpatterns = [
     path("signup/", signup, name="signup"),
-    # path("login/",
-    #      LoginView.as_view(
-    #          template_name="authentication/login.html",
-    #          redirect_authenticated_user=True,
-    #          form=LoginForm()
-    #      ),
-    #      name="login"),
-    path("login/", login_view, name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("password_reset", password_reset, name="password-reset"),
     path("password_change/",
-         PasswordChangeView.as_view(
-             template_name="authentication/password_change.html",),
-         name="password-change"),
+         PasswordChangeViewOverride.as_view(), name="password-change"),
     path("password_change_done",
          PasswordChangeDoneView.as_view(
              template_name="authentication/password_change_done.html"),

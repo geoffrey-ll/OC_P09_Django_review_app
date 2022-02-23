@@ -3,28 +3,55 @@
 {% if option == 'ticket-answer' %} content-ticket-answer{% endif %}">
   <div class="flux-content-first-line">
     {% if option == "interlock" %}
-      <p>Ticket - <strong>{{ post.user }}</strong></p>
+      <p>Ticket - 
+        <strong>
+          {% if post.user == request.user %}Vous
+          {% else %}{{ post.user }}
+          {% endif %}
+        </strong></p>
     {% else %}
-      <p><strong>{{ post.user }}</strong> a demandé une critique</p>
+      {% if post.user == request.user %}
+        <p><strong>Vous</strong> avez publié une critique</p>
+      {% else %}
+        <p><strong>{{ post.user }}</strong> a demandé une critique</p>
       <p>{{ post.time_created }}</p>
+      {% endif %}
     {% endif %}
   </div>
+
   <p>{{ post.title }}</p>
   {% if post.description %}
     {% if option != "interlock" %}
       <p>{{ post.description }}</p>
     {% endif %}
   {% endif %}
+  
   {% if post.image %}
     <div class="margin-left-20">
       <img src="{{ post.image.url }}" alt="Image inexistante">
     </div>
   {% endif %}
+
   {% if not option %}
-    <div class="flex-button-ticket">
+    <div class="flexbox-right">
       <a class="fields-margin" href="{% url 'ticket-answer' post.id %}">
-        <input class="generic-buttonn to-right" type="submit" value="Crée une critique">
+        <input class="generic-buttonn" type="submit" value="Crée une critique">
       </a>
     </div>
+  {% endif %}
+
+  {% if option == "flux-user" %}
+    <div class="flexbox-right">
+      <a class="fields-margin" href="{% url 'ticket-edit' post.id %}">
+        <input class="generic-buttonn" type="submit" value="Modifier">
+      </a>
+      <a class="fields-margin" href="{% url 'ticket-delete' post.id %}">
+        <input class="generic-buttonn" type="submit" value="Supprimer">
+      </a>
+    </div>
+  {% endif %}
+
+  {% if option == "delete" %}
+
   {% endif %}
 </div>

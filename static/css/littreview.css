@@ -105,9 +105,6 @@ input:-moz-placeholder { text-align: center; }
     justify-content: right;
 }
 
-.to-right {
-    text-align: right;
-}
 
 .fields-margin {
     margin: 10px;
@@ -163,10 +160,6 @@ input:-moz-placeholder { text-align: center; }
     display: none;
 }
 
-.flex-button-ticket {
-    display: flex;
-    justify-content: right;
-}
 
 .separate-form {
     min-width: 500px;

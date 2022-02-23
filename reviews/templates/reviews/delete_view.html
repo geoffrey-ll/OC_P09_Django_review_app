@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <h2>Supprimer votre {{ delete }}</h2>
+
+  <div class="flux-container">
+    {% if delete == "ticket" %}
+      {% include "reviews/ticket_view_snippet.html" %}
+    {% elif delete == "critique" %}
+      {% include "reviews/review_view_snippet.html" %}
+    {% endif %}
+    <p>Êtes-vous sûr de vouloir supprimer votre {{ delete }} ?</p>
+  </div>
+
+  <form class="flexbox-center" method="post">
+    {% csrf_token %}
+    <input class="generic-buttonn" type="submit" value="Suprimer">
+  </form>
+
+  <a class="flexbox-center" href="{% url 'flux-user' %}">
+    <input class="generic-buttonn" type="submit" value="Annuler">
+  </a>
+{% endblock %}

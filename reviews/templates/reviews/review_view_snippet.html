@@ -1,6 +1,11 @@
 <div class="borderr flux-content-container">
   <div class="flux-content-first-line">
-    <p><strong>{{ post.user }}</strong> a publié une critique</p>
+    {% if post.user == request.user %}
+      <p><strong>Vous</strong> avez publié une critique</p>
+    {% else %}
+      <p><strong>{{ post.user }}</strong> a publié une critique</p>
+    {% endif %}
+
     <p>{{ post.time_created }}</p>
   </div>
   <div>
@@ -14,4 +19,14 @@
     {% include 'reviews/ticket_view_snippet.html' with post=post.ticket option="interlock" %}
   </div>
 
+  {% if option == "flux-user" %}
+    <div class="flexbox-right">
+      <a class="fields-margin" href="{% url 'review-edit' post.id %}">
+        <input class="generic-buttonn" type="submit" value="Modifier">
+      </a>
+      <a class="fields-margin" href="{% url 'review-delete' post.id %}">
+        <input class="generic-buttonn" type ="submit" value="Supprimer">
+      </a>
+    </div>
+  {% endif %}
 </div>

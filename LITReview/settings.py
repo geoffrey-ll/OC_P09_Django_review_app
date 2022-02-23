@@ -132,7 +132,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Doit devenir la page d'accueil du site car son accès doit être reservé aux users
-LOGIN_URL = "login"
+LOGIN_URL = "home-page"
 # Le redirection doit mener vers le flux de l'utilisateur.
 # A modif dès que le flux est en chantier.
 LOGIN_REDIRECT_URL = "flux"

@@ -1,23 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h2 class="{% if option %}hidden{% endif %}">Créer un ticket</h2>
+{% if not option %}
+  <h2>Créer un ticket</h2>
+{% elif option == "edit" %}
+  <h2>Modifier votre ticket</h2>
+{% endif %}
 
 <form class="flexbox-center flex-column" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {% for field in form %}
     {{ field.label_tag }}
+
+    {% if image %}
+      <img src="{{ form.image.url }}" alt="Image inexistante">
+      <p>JE SUIS LA</p>
+    {% endif %}
+    
     {{ field }}
   {% endfor %}
 
-  <div class="to-right{% if option %} hidden{% endif %}">
+  <div class="flexbox-right">
     <input class="button-margin-right generic-buttonn" type="submit" value="Envoyer">
   </div>
 </form>
 
-<div class="to-right{% if option %} hidden{% endif %}">
-  <a href="{% url 'flux' %}">
+<div class="flexbox-right">
+  <a href="
+  {% if option == 'edit' %}{% url 'flux-user' %}
+  {% else %}{% url 'flux' %}
+  {% endif %}">
     <input class="button-margin-right generic-buttonn" type="submit" value="Annuler">
   </a>
 </div>

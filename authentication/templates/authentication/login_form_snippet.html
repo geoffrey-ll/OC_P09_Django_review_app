@@ -1,19 +1,20 @@
 <div>
-    <h2>Connexion</h2>
-    <div class="flexbox-center">
-        <form class="flexbox-center flex-column size-little-fields" method="POST">
-        {% if form.errors %}
-           {{ form.errors }}
-        {% endif %}
+  <h2>Connexion</h2>
+  <div class="flexbox-center">
+    <form class="flexbox-center flex-column size-little-fields" method="POST">
+    {% if form.errors %}
+      {{ form.errors }}
+    {% endif %}
 
-        {% csrf_token %}
-        {% for field in form %}
-            {{ field }}
-        {% endfor %}
+    {% csrf_token %}
+    {% for field in form %}
+      {{ field }}
+    {% endfor %}
 
-        <div class="flexbox-right">
-            <input class="fields-margin generic-buttonn" type="submit" value="Se connecter">
-        </div>
-        </form>
+    <a href="{% url 'password-reset' %}">Mot de passe</a>
+    <div class="flexbox-right">
+      <input class="fields-margin generic-buttonn" type="submit" value="Se connecter">
     </div>
+    </form>
+  </div>
 </div>
