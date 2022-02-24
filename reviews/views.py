@@ -14,6 +14,7 @@ from authentication import models as models_auth
 
 
 MESSAGE_DENIED = "Accès refusé, car vous n'êtes pas l'auteur"
+MESSAGE_EXTRA_TAGS = "alert alert-primary bs-perso-message"
 
 
 @login_required
@@ -104,7 +105,7 @@ def ticket_edit(request, ticket_id):
                 return redirect("posts-user")
     else:
         messages.error(request, MESSAGE_DENIED,
-                       extra_tags="alert alert-primary message-bootstrap")
+                       extra_tags=MESSAGE_EXTRA_TAGS)
         return redirect("flux-user")
     return render(request, "reviews/ticket_form.html",
                   context={"form": form, "option": "edit"})
@@ -129,7 +130,7 @@ def review_edit(request, review_id):
                 return redirect("posts-user")
     else:
         messages.error(request, MESSAGE_DENIED,
-                       extra_tags="alert alert-primary message-bootstrap")
+                       extra_tags=MESSAGE_EXTRA_TAGS)
         return redirect("flux-user")
     return render(request, "reviews/ticket_answer.html",
                   context={"form": form, "post": ticket, "option": "edit"})
@@ -144,7 +145,7 @@ def ticket_delete(request, ticket_id):
             return redirect("posts-user")
     else:
         messages.error(request, MESSAGE_DENIED,
-                       extra_tags="alert alert-primary message-bootstrap")
+                       extra_tags=MESSAGE_EXTRA_TAGS)
         return redirect("flux-user")
     return render(request, "reviews/delete_view.html",
                   context={"post": ticket, "delete": "ticket"})
@@ -159,7 +160,7 @@ def review_delete(request, review_id):
             return redirect("posts-user")
     else:
         messages.error(request, MESSAGE_DENIED,
-                       extra_tags="alert alert-primary message-bootstrap")
+                       extra_tags=MESSAGE_EXTRA_TAGS)
         return redirect("flux-user")
     return render(request, "reviews/delete_view.html",
                   context={"post": review, "delete": "critique"})
