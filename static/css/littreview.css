@@ -19,6 +19,11 @@ a.generic-buttonn {
     text-align: center;
 }
 
+.h2 {
+    text-align: center;
+    margin: 30px 0px;
+}
+
 ::-webkit-input-placeholder { text-align: center;}
 ::-moz-placeholder { text-align: center;}
 :-ms-input-placeholder { text-align: center; }

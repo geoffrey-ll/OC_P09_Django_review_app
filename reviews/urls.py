@@ -23,13 +23,13 @@ from reviews.views import review_upload
 from reviews.views import ticket_answer
 from reviews.views import review_edit
 from reviews.views import review_delete
-from reviews.views import flux
 from reviews.views import flux_user
+from reviews.views import posts_user
 
 
 urlpatterns = [
-    path("", flux, name="flux"),
     path("flux_user", flux_user, name="flux-user"),
+    path("posts_user", posts_user, name="posts-user"),
     path("ticket_upload", ticked_upload, name="ticket-upload"),
     path("tickets/<int:ticket_id>", ticket_edit, name="ticket-edit"),
     path("tickets/<int:ticket_id>/delete", ticket_delete, name="ticket-delete"),

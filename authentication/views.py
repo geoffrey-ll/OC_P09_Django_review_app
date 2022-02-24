@@ -60,7 +60,7 @@ def signup(request):
 
 def login_view(request):
     if request.user.is_authenticated == True:
-        return redirect("flux")
+        return redirect("flux-user")
     form = LoginForm()
     if request.method == "POST":
         form = LoginForm(request.POST)

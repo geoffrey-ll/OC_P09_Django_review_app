@@ -2,7 +2,12 @@
 
 {% block content %}
 
-  <h2>Flux général</h2>
+  {% if option == "posts-user" %}
+    <h2>Vos posts</h2>
+  {% else %}
+    <div class="h2"> </div>
+  {% endif %}
+  
   <div class="flux-container">
     <div class="flux-content-first-line flux-upload-link-container">
       <a class="fields-margin" href="{% url 'ticket-upload' %}">

@@ -135,7 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "home-page"
 # Le redirection doit mener vers le flux de l'utilisateur.
 # A modif dès que le flux est en chantier.
-LOGIN_REDIRECT_URL = "flux"
+LOGIN_REDIRECT_URL = "flux-user"
 LOGOUT_REDIRECT_URL = LOGIN_URL
 
 PASSWORD_CHANGE_DONE = ""

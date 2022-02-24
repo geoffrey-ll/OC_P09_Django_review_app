@@ -19,7 +19,7 @@
     {% include 'reviews/ticket_view_snippet.html' with post=post.ticket option="interlock" %}
   </div>
 
-  {% if option == "flux-user" %}
+  {% if option == "posts-user" %}
     <div class="flexbox-right">
       <a class="fields-margin" href="{% url 'review-edit' post.id %}">
         <input class="generic-buttonn" type="submit" value="Modifier">

@@ -8,7 +8,7 @@ class TicketAdmin(admin.ModelAdmin):
 
 
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ("user", "headline", "ticket", "rating", "id")
+    list_display = ("user", "headline", "ticket", "rating", "ticket_id", "id", )
 
 admin.site.register(Ticket, TicketAdmin)
 admin.site.register(Review, ReviewAdmin)

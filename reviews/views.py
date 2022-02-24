@@ -13,29 +13,24 @@ from authentication import models as models_auth
 
 
 @login_required
-def flux(request):
-    # Ses posts + posts des user suivis + reviews même si non suivi
-    # tickets = []
-    # relations_user = models_auth.UserFollows.objects.filter(Q(user=request.user))
-    tests.get_users_viewable_reviews(request.user)
-    tickets = models.Ticket.objects.filter(Q(user=request.user))
-    # for user in relations_user:
-    #     tickets.append(models.Ticket.objects.filter(Q(user=user)))
-    # tickets_followed = models.Ticket.objects.filter(Q(user=followed_user for followed_user in relations_user))
-    reviews = models.Review.objects.all()
+def flux_user(request):
+    # Ses posts + posts des user suivis + reviews à ses tickets même si l'user
+    # n'est pas suivi
+    tickets = tests.get_users_viewable_tickets(request.user)
+    reviews = tests.get_users_viewable_reviews(request.user)
     flux = sorted(chain(tickets, reviews),
                   key=lambda instance: instance.time_created, reverse=True)
     return render(request, "reviews/flux.html", context={"flux": flux,})
 
 
 @login_required
-def flux_user(request):
+def posts_user(request):
     tickets_user = models.Ticket.objects.filter(Q(user=request.user))
     reviews_user = models.Review.objects.filter(Q(user=request.user))
     flux = sorted(chain(tickets_user, reviews_user),
                   key=lambda instance: instance.time_created, reverse=True)
     return render(request, "reviews/flux.html",
-                  context={"flux": flux, "option": "flux-user"})
+                  context={"flux": flux, "option": "posts-user"})
 
 
 @login_required
@@ -47,7 +42,7 @@ def ticked_upload(request):
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.save()
-            return redirect("flux")
+            return redirect("flux-user")
     return render(request, "reviews/ticket_form.html",
                   context={"form": form})
 
@@ -67,7 +62,7 @@ def review_upload(request):
             review.ticket = ticket
             ticket.save()
             review.save()
-            return redirect("flux")
+            return redirect("flux-user")
     return render(request, "reviews/review_upload.html",
                   context={"form_review": form_review,
                            "form_ticket": form_ticket})
@@ -83,7 +78,7 @@ def ticket_answer(request, ticket_id):
             review.ticket = ticket
             review.user = request.user
             review.save()
-            return redirect("flux")
+            return redirect("flux-user")
     return render(request, "reviews/ticket_answer.html",
                   context={"form": form,
                            "post": ticket})
@@ -102,7 +97,7 @@ def ticket_edit(request, ticket_id):
             form = forms.TicketForm(request.POST, request.FILES, instance=ticket)
             if form.is_valid():
                 form.save()
-                return redirect("flux-user")
+                return redirect("posts-user")
     else:
         return redirect("follow-user")
     return render(request, "reviews/ticket_form.html",
@@ -125,7 +120,7 @@ def review_edit(request, review_id):
                                     instance=review)
             if form.is_valid():
                 form.save()
-                return redirect("flux-user")
+                return redirect("posts-user")
     else:
         return redirect("follow-user")
     return render(request, "reviews/ticket_answer.html",
@@ -138,7 +133,7 @@ def ticket_delete(request, ticket_id):
     if ticket.user == request.user:
         if request.method == "POST":
             ticket.delete()
-            return redirect("flux-user")
+            return redirect("posts-user")
     else:
         return redirect("follow-user")
     return render(request, "reviews/delete_view.html",
@@ -151,7 +146,7 @@ def review_delete(request, review_id):
     if review.user == request.user:
         if request.method == "POST":
             review.delete()
-            return redirect("flux-user")
+            return redirect("posts-user")
     else:
         return redirect("follow-user")
     return render(request, "reviews/delete_view.html",
