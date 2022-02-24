@@ -199,3 +199,10 @@ input:-moz-placeholder { text-align: center; }
 .margin-left-20 {
     margin-left: 20px;
 }
+
+.message-bootstrap {
+    text-align: center;
+    font-size: 2rem;
+    width: 55%;
+    margin: 30px 23%;
+}

@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 from django.conf import settings
@@ -10,6 +11,9 @@ from itertools import chain
 
 from . import forms, models, tests
 from authentication import models as models_auth
+
+
+MESSAGE_DENIED = "Accès refusé, car vous n'êtes pas l'auteur"
 
 
 @login_required
@@ -99,7 +103,9 @@ def ticket_edit(request, ticket_id):
                 form.save()
                 return redirect("posts-user")
     else:
-        return redirect("follow-user")
+        messages.error(request, MESSAGE_DENIED,
+                       extra_tags="alert alert-primary message-bootstrap")
+        return redirect("flux-user")
     return render(request, "reviews/ticket_form.html",
                   context={"form": form, "option": "edit"})
 
@@ -122,7 +128,9 @@ def review_edit(request, review_id):
                 form.save()
                 return redirect("posts-user")
     else:
-        return redirect("follow-user")
+        messages.error(request, MESSAGE_DENIED,
+                       extra_tags="alert alert-primary message-bootstrap")
+        return redirect("flux-user")
     return render(request, "reviews/ticket_answer.html",
                   context={"form": form, "post": ticket, "option": "edit"})
 
@@ -135,7 +143,9 @@ def ticket_delete(request, ticket_id):
             ticket.delete()
             return redirect("posts-user")
     else:
-        return redirect("follow-user")
+        messages.error(request, MESSAGE_DENIED,
+                       extra_tags="alert alert-primary message-bootstrap")
+        return redirect("flux-user")
     return render(request, "reviews/delete_view.html",
                   context={"post": ticket, "delete": "ticket"})
 
@@ -148,6 +158,8 @@ def review_delete(request, review_id):
             review.delete()
             return redirect("posts-user")
     else:
-        return redirect("follow-user")
+        messages.error(request, MESSAGE_DENIED,
+                       extra_tags="alert alert-primary message-bootstrap")
+        return redirect("flux-user")
     return render(request, "reviews/delete_view.html",
                   context={"post": review, "delete": "critique"})
