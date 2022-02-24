@@ -9,14 +9,17 @@
   {% endif %}
 
   <div class="flux-container">
-    <div class="flux-content-first-line flux-upload-link-container">
-      <a class="fields-margin" href="{% url 'ticket-upload' %}">
-        <input class="generic-buttonn button-upload" type="submit" value="Demander une critique">
-      </a>
-      <a class="fields-margin" href="{% url 'review-upload' %}">
-        <input class="generic-buttonn button-upload" type="submit" value="Créer une critique">
-      </a>
-    </div>
+    
+    {% if not option %}
+      <div class="flux-content-first-line flux-upload-link-container">
+        <a class="fields-margin" href="{% url 'ticket-upload' %}">
+          <input class="generic-buttonn button-upload" type="submit" value="Demander une critique">
+        </a>
+        <a class="fields-margin" href="{% url 'review-upload' %}">
+          <input class="generic-buttonn button-upload" type="submit" value="Créer une critique">
+        </a>
+      </div>
+    {% endif %}
     
     {% for post in flux %}
       {% if post.title %}
