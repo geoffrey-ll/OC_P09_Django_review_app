@@ -19,8 +19,20 @@ a.generic-buttonn {
     text-align: center;
 }
 
-.bs-perso-navbar {
-    justify-content: center;
+.bs-perso-navbar-central {
+    position: sticky;
+    left: 46.4%;
+}
+
+.bs-perso-navbar-brand-container {
+    display: flex;
+    justify-content: space-between;
+    width: 22.5%;
+}
+
+.bs-perso-navbar-right {
+    display: flex;
+    min-width: 22.5%;
 }
 
 .h2 {

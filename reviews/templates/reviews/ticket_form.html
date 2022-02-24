@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 {% if not option %}
   <h2>Créer un ticket</h2>
 {% elif option == "edit" %}
@@ -27,8 +28,8 @@
 
 <div class="flexbox-right">
   <a href="
-  {% if option == 'edit' %}{% url 'flux-user' %}
-  {% else %}{% url 'flux' %}
+  {% if option == 'edit' %}{% url 'posts-user' %}
+  {% else %}{% url 'flux-user' %}
   {% endif %}">
     <input class="button-margin-right generic-buttonn" type="submit" value="Annuler">
   </a>

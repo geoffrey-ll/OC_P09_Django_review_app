@@ -8,7 +8,7 @@
 
   <div class="flux-container">
     
-    {% if not option %}
+    {% if option == "flux-user" %}
       <div class="flux-content-first-line flux-upload-link-container">
         <a class="fields-margin" href="{% url 'ticket-upload' %}">
           <input class="generic-buttonn button-upload" type="submit" value="Demander une critique">

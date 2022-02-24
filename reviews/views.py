@@ -25,7 +25,8 @@ def flux_user(request):
     reviews = tests.get_users_viewable_reviews(request.user)
     flux = sorted(chain(tickets, reviews),
                   key=lambda instance: instance.time_created, reverse=True)
-    return render(request, "reviews/flux.html", context={"flux": flux,})
+    return render(request, "reviews/flux.html",
+                  context={"flux": flux, "option": "flux-user"})
 
 
 @login_required

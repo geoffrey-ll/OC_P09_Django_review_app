@@ -32,7 +32,7 @@
     </div>
   {% endif %}
 
-  {% if not option %}
+  {% if option == "flux-user" %}
     <div class="flexbox-right">
       <a class="fields-margin" href="{% url 'ticket-answer' post.id %}">
         <input class="generic-buttonn" type="submit" value="Crée une critique">
@@ -51,7 +51,4 @@
     </div>
   {% endif %}
 
-  {% if option == "delete" %}
-
-  {% endif %}
 </div>
