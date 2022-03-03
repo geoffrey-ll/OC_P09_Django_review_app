@@ -7,13 +7,10 @@ from django.contrib.auth.views import PasswordChangeDoneView    # A AJOUTER
 from django.conf import settings
 
 
-from .views import login_view
-# from .forms import LoginForm
 from .views import signup
 from .views import follow_user
 from .views import follow_unsubscribe
 
-from .forms import SignupForm
 
 from .views import password_reset
 from .views import PasswordChangeViewOverride

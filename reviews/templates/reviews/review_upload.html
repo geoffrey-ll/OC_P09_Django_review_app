@@ -12,6 +12,9 @@
       {% for field in form_ticket %}
         {{ field.label_tag }}
         {{ field }}
+        {% if field.errors %}
+          <div class="alert alert-info">{{ field.errors }}</div>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
@@ -22,6 +25,9 @@
       {% for field in form_review %}
         {{ field.label_tag }}
         {{ field }}
+        {% if field.errors %}
+          <div class="alert alert-info">{{ field.errors }}</div>
+        {% endif %}
       {% endfor %}
     </div>
 

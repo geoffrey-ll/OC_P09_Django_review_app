@@ -3,15 +3,17 @@
 {% block content %}
 
 <h2>Inscrivez-vous</h2>
-{% if form.errors %}
-  {{ form.errors }}
-{% endif %}
+
 
 <div class="flexbox-center">
   <form class="flexbox-center flex-column size-little-fields" method="post">
     {% csrf_token %}
+
     {% for field in form %}
       {{ field }}
+      {% if field.errors %}
+        <div class="alert alert-info">{{ field.errors }}</div>
+      {% endif %}
     {% endfor %}
 
     <div class="flexbox-right">

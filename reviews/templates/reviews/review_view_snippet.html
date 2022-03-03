@@ -1,4 +1,4 @@
-<div class="borderr flux-content-container">
+<div class="borderr flux-content-container hyphens-break-word">
   <div class="flux-content-first-line">
     {% if post.user == request.user %}
       <p><strong>Vous</strong> avez publié une critique</p>
@@ -13,7 +13,7 @@
     <p>{{ post.rating }}</p>
   </div>
   {% if post.body %}
-    {{ post.body }}
+    <p>{{ post.body }}</p>
   {% endif %}
   <div class="flux-content-container-interlock">
     {% include 'reviews/ticket_view_snippet.html' with post=post.ticket option="interlock" %}

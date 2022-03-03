@@ -13,12 +13,15 @@
   {% for field in form %}
     {{ field.label_tag }}
 
-    {% if image %}
-      <img src="{{ form.image.url }}" alt="Image inexistante">
+    {% if field.label_tag == "Image" %}
       <p>JE SUIS LA</p>
+      <img src="{{ form.image.url }}" alt="Image inexistante">
     {% endif %}
     
     {{ field }}
+    {% if field.errors %}
+      <div class="alert alert-info">{{ field.errors }}</div>
+    {% endif %}
   {% endfor %}
 
   <div class="flexbox-right">

@@ -7,6 +7,7 @@
 {% elif option == "edit" %}
   <h2>Modifier votre critique</h2>
 {% endif %}
+
 <div class="flexbox-center flex-column">
   <div class="separate-form">
     <p><strong>Vous</strong> êtes en train de poster en réponse à</p>
@@ -23,6 +24,9 @@
       {% for field in form %}
         {{ field.label_tag }}
         {{ field }}
+        {% if field.errors %}
+          <div class="alert alert-info">{{ field.errors }}</div>
+        {% endif %}
       {% endfor %}
 
       <div class="flexbox-right">

@@ -16,15 +16,10 @@ Including another URLconf
 from django.urls import path
 
 
-from reviews.views import ticked_upload
-from reviews.views import ticket_edit
-from reviews.views import ticket_delete
-from reviews.views import review_upload
-from reviews.views import ticket_answer
-from reviews.views import review_edit
-from reviews.views import review_delete
-from reviews.views import flux_user
-from reviews.views import posts_user
+from reviews.views import flux_user, posts_user
+from reviews.views import ticked_upload, ticket_edit, ticket_delete
+from reviews.views import review_upload, review_edit, review_delete, \
+    review_ticket_answer
 
 
 urlpatterns = [
@@ -34,8 +29,8 @@ urlpatterns = [
     path("tickets/<int:ticket_id>", ticket_edit, name="ticket-edit"),
     path("tickets/<int:ticket_id>/delete", ticket_delete, name="ticket-delete"),
     path("review_upload", review_upload, name="review-upload"),
-    path("review_upload/ticket/<int:ticket_id>", ticket_answer,
-         name="ticket-answer"),
+    path("review_upload/ticket/<int:ticket_id>",
+         review_ticket_answer, name="ticket-answer"),
     path("reviews/<int:review_id>", review_edit, name="review-edit"),
     path("reviews/<int:review_id>/delete", review_delete, name="review-delete")
 ]

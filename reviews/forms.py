@@ -1,21 +1,15 @@
 from django import forms
 
 
-from . import models
-
-
-def fields_attribute(fields, label_fields):
-    for idx, field in enumerate(fields):
-        fields[field].widget.attrs.update(
-            {"class": "fields-margin"})
-        fields[field].label = label_fields[idx]
+from .models import Ticket, Review
 
 
 class TicketForm(forms.ModelForm):
+    """Formulaire pour les tickets."""
     label_fields = ["Titre", "Description", "Image"]
 
     class Meta:
-        model = models.Ticket
+        model = Ticket
         fields = ["title", "description", "image"]
 
 
@@ -25,12 +19,21 @@ class TicketForm(forms.ModelForm):
 
 
 class ReviewForm(forms.ModelForm):
+    """Formulaire pour les reviews."""
     label_fields = ["Titre", "Note", "Commentaire"]
 
     class Meta:
-        model = models.Review
+        model = Review
         fields = ["headline", "rating", "body"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         fields_attribute(self.fields, self.label_fields)
+
+
+def fields_attribute(fields, label_fields):
+    """Modifications d'attributs des champs des formulaires."""
+    for idx, field in enumerate(fields):
+        fields[field].widget.attrs.update(
+            {"class": "fields-margin"})
+        fields[field].label = label_fields[idx]

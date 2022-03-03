@@ -7,11 +7,13 @@
     <form class="size-search-container" method="POST">
       {% csrf_token %}
       {% if message %}
-        <p class="size-search-container">{{ message }}</p>
+        <p class="size-search-container alert alert-info">{{ message }}</p>
       {% endif %}
       <table>
         <tr>
-          <td class="size-search-field">{{ form.username }}</td>
+          <td class="size-search-field">
+            {{ form.username }}{{ form.username.errors }}
+          </td>
           <td>
             <input class="fields-margin generic-buttonn" type="submit" value="Envoyer">
           </td>

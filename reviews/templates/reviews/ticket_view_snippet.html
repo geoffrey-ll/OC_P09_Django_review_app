@@ -1,4 +1,4 @@
-<div class="borderr flux-content-container
+<div class="borderr flux-content-container hyphens-break-word
 {% if option == 'interlock' %} flux-content-interlock{% endif %}
 {% if option == 'ticket-answer' %} content-ticket-answer{% endif %}">
   <div class="flux-content-first-line">
@@ -8,14 +8,15 @@
           {% if post.user == request.user %}Vous
           {% else %}{{ post.user }}
           {% endif %}
-        </strong></p>
+        </strong>
+      </p>
     {% else %}
       {% if post.user == request.user %}
-        <p><strong>Vous</strong> avez publié une critique</p>
+        <p><strong>Vous</strong> avez publié un ticket</p>
       {% else %}
-        <p><strong>{{ post.user }}</strong> a demandé une critique</p>
-      <p>{{ post.time_created }}</p>
+        <p><strong>{{ post.user }}</strong> a demandé une ticket</p>
       {% endif %}
+      <p>{{ post.time_created }}</p>
     {% endif %}
   </div>
 

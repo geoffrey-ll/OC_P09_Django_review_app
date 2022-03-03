@@ -2,16 +2,18 @@
   <h2>Connexion</h2>
   <div class="flexbox-center">
     <form class="flexbox-center flex-column size-little-fields" method="POST">
-    {% if form.errors %}
-      {{ form.errors }}
-    {% endif %}
-
     {% csrf_token %}
+
+    {% if message %}
+      <p class="alert alert-info">{{ message }}</p>
+    {% endif %}
+    
     {% for field in form %}
       {{ field }}
+      {{ field.errors }}
     {% endfor %}
 
-    <a href="{% url 'password-reset' %}">Mot de passe</a>
+    <a href="{% url 'password-reset' %}">Mot de passe oublié ?</a>
     <div class="flexbox-right">
       <input class="fields-margin generic-buttonn" type="submit" value="Se connecter">
     </div>

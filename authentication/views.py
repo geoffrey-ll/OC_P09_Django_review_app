@@ -24,6 +24,7 @@ from .forms import PasswordChangeFormOverride
 
 from . import tests
 
+
 # Create your views here
 def password_reset(request):
     form = PasswordResetForm()
@@ -41,7 +42,6 @@ def password_reset(request):
                            "message": message})
 
 
-
 class PasswordChangeViewOverride(PasswordChangeView):
     template_name = "authentication/password_change.html"
     form_class = PasswordChangeFormOverride
@@ -53,7 +53,7 @@ def signup(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("login")
+            return redirect("home-page")
     return render(request, "authentication/signup.html",
                   context={"form": form})
 
@@ -62,31 +62,33 @@ def login_view(request):
     if request.user.is_authenticated == True:
         return redirect("flux-user")
     form = LoginForm()
+    message = ''
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
+            print(f"\nJe suis valid\n")
             user = authenticate(
                 username=form.cleaned_data["username"],
                 password=form.cleaned_data["password"])
-            print(f"\nJe suis user authentifier {user}\n")
+            print(f"\nuser:\n{user}\n")
             if user is not None:
                 login(request, user)
                 return redirect(settings.LOGIN_REDIRECT_URL)
+            else:
+                message = "Nom d'utilisateur ou mot de passe invalide."
 
     return render(request, "authentication/home_page.html",
-                  context={"form": form})
+                  context={"form": form, "message": message})
 
 
 @login_required
 def follow_user(request):
     # Ceux suivit par l'user
-    relations_user = \
-        models.UserFollows.objects.filter(Q(user=request.user))\
-            .order_by("followed_user__username")
+    relations_user = models.UserFollow.objects\
+        .filter(user=request.user).order_by("followed_user__username")
     # Ceux qui suivent l'user
-    following_users = \
-        models.UserFollows.objects.filter(Q(followed_user=request.user))\
-            .order_by("user__username")
+    following_users = models.UserFollow.objects\
+        .filter(followed_user=request.user).order_by("user__username")
     form = FollowForm()
     message = ''
 
@@ -98,12 +100,22 @@ def follow_user(request):
                 if to_search_user == str(request.user):
                     message = "Impossible de s'abonner à soi-même."
                 else:
-                    to_follow_user = \
-                        User.objects.get(username=to_search_user)
-                    models.UserFollows.objects.create(
-                        user=request.user, followed_user=to_follow_user)
+                    to_follow_user = User.objects.get(username=to_search_user)
+                    already_follow = models.UserFollow.objects.filter(
+                        user=request.user,
+                        followed_user=to_follow_user
+                    )
+                    if len(already_follow) != 0:
+                        message = "Vous suivez déjà cet utilisateur."
+                    else:
+                        models.UserFollow.objects.create(
+                            user=request.user,
+                            followed_user=to_follow_user
+                        )
             except:
+                # DoesNoExist & IntegrityError
                 message = "Utilisateur inconnu."
+
 
     return render(request, "authentication/follow_user.html",
                   context={"relations_user": relations_user,
@@ -114,7 +126,7 @@ def follow_user(request):
 
 @login_required
 def follow_unsubscribe(request, relation_id, follower_name):
-    follow_unsubscribe = models.UserFollows.objects.get(id=relation_id)
+    follow_unsubscribe = models.UserFollow.objects.get(id=relation_id)
     if follow_unsubscribe.user == request.user:
         if request.method == "POST":
             follow_unsubscribe.delete()

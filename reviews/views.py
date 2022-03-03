@@ -1,16 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
-from django.conf import settings
-from django.db.models import Q
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 from itertools import chain
 
 
-from . import forms, models, tests
-from authentication import models as models_auth
+from authentication.models import UserFollow
+from .forms import TicketForm, ReviewForm
+from .models import Ticket, Review
 
 
 MESSAGE_DENIED = "Accès refusé, car vous n'êtes pas l'auteur"
@@ -19,31 +16,52 @@ MESSAGE_EXTRA_TAGS = "alert alert-primary bs-perso-message"
 
 @login_required
 def flux_user(request):
-    # Ses posts + posts des user suivis + reviews à ses tickets même si l'user
-    # n'est pas suivi
-    tickets = tests.get_users_viewable_tickets(request.user)
-    reviews = tests.get_users_viewable_reviews(request.user)
+    """Flux visible par l'utilisateur."""
+    tickets, reviews = get_users_viewable_posts(request.user)
     flux = sorted(chain(tickets, reviews),
-                  key=lambda instance: instance.time_created, reverse=True)
+                  key=lambda instance: instance.time_created,
+                  reverse=True)
     return render(request, "reviews/flux.html",
                   context={"flux": flux, "option": "flux-user"})
 
 
+def get_users_viewable_posts(user):
+    """Retourne les tickets et reviews visibles par l'utilisateur."""
+    relations_users = UserFollow.objects.filter(user=user)
+    followed_user = [r.followed_user for r in relations_users]
+
+    tickets_of_user = Ticket.objects.filter(user=user)
+    tickets_of_followed = Ticket.objects.filter(user__in=followed_user)
+
+    reviews_of_user = Review.objects.filter(user=user)
+    reviews_of_followed = Review.objects.filter(user__in=followed_user)
+    reviews_to_user = Review.objects.filter(ticket__in=tickets_of_user)
+    reviews_to_followed = Review.objects.filter(ticket__in=tickets_of_followed)
+
+    viewable_tickets = set(chain(tickets_of_user, tickets_of_followed))
+    viewable_reviews = set(chain(reviews_of_user, reviews_of_followed,
+                                 reviews_to_user, reviews_to_followed))
+    return viewable_tickets, viewable_reviews
+
+
 @login_required
 def posts_user(request):
-    tickets_user = models.Ticket.objects.filter(Q(user=request.user))
-    reviews_user = models.Review.objects.filter(Q(user=request.user))
+    """Les posts de l'utilisateur."""
+    tickets_user = Ticket.objects.filter(user=request.user)
+    reviews_user = Review.objects.filter(user=request.user)
     flux = sorted(chain(tickets_user, reviews_user),
-                  key=lambda instance: instance.time_created, reverse=True)
+                  key=lambda instance: instance.time_created,
+                  reverse=True)
     return render(request, "reviews/flux.html",
                   context={"flux": flux, "option": "posts-user"})
 
 
 @login_required
 def ticked_upload(request):
-    form = forms.TicketForm()
+    """Création d'un ticket."""
+    form = TicketForm()
     if request.method == "POST":
-        form = forms.TicketForm(request.POST, request.FILES)
+        form = TicketForm(request.POST, request.FILES)
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
@@ -55,11 +73,12 @@ def ticked_upload(request):
 
 @login_required
 def review_upload(request):
-    form_review = forms.ReviewForm()
-    form_ticket= forms.TicketForm()
+    """Création d'une review et d'un ticket en même temps."""
+    form_review = ReviewForm()
+    form_ticket = TicketForm()
     if request.method == "POST":
-        form_review = forms.ReviewForm(request.POST, request.FILES)
-        form_ticket = forms.TicketForm(request.POST, request.FILES)
+        form_review = ReviewForm(request.POST, request.FILES)
+        form_ticket = TicketForm(request.POST, request.FILES)
         if form_review.is_valid() and form_ticket.is_valid():
             ticket = form_ticket.save(commit=False)
             ticket.user = request.user
@@ -74,11 +93,12 @@ def review_upload(request):
                            "form_ticket": form_ticket})
 
 
-def ticket_answer(request, ticket_id):
-    form = forms.ReviewForm()
-    ticket = models.Ticket.objects.get(id=ticket_id)
+def review_ticket_answer(request, ticket_id):
+    """Création d'une review en réponse à un ticket existant."""
+    form = ReviewForm()
+    ticket = Ticket.objects.get(id=ticket_id)
     if request.method == "POST":
-        form = forms.ReviewForm(request.POST, request.FILES)
+        form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
             review.ticket = ticket
@@ -96,11 +116,12 @@ def ticket_answer(request, ticket_id):
 @login_required
 # @permission_required("reviews.change_ticket", raise_exception=True)
 def ticket_edit(request, ticket_id):
-    ticket = get_object_or_404(models.Ticket, id=ticket_id)
-    form = forms.TicketForm(instance=ticket)
+    """Édition d'un de ses tickets."""
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    form = TicketForm(instance=ticket)
     if ticket.user == request.user:
         if request.method == "POST":
-            form = forms.TicketForm(request.POST, request.FILES, instance=ticket)
+            form = TicketForm(request.POST, request.FILES, instance=ticket)
             if form.is_valid():
                 form.save()
                 return redirect("posts-user")
@@ -118,14 +139,13 @@ def ticket_edit(request, ticket_id):
 @login_required
 # @permission_required("reviews.change_review", raise_exception=True)
 def review_edit(request, review_id):
-    review = get_object_or_404(models.Review, id=review_id)
-    form = forms.ReviewForm(instance=review)
-    ticket = models.Ticket.objects.get(id=review.ticket_id)
-    # Un if pour vérifier que user est l'auteur de la review ?
+    """Édition d'une de ses reviews."""
+    review = get_object_or_404(Review, id=review_id)
+    form = ReviewForm(instance=review)
+    ticket = Ticket.objects.get(id=review.ticket_id)
     if review.user == request.user:
         if request.method == "POST":
-            form = forms.ReviewForm(request.POST, request.FILES,
-                                    instance=review)
+            form = ReviewForm(request.POST, request.FILES, instance=review)
             if form.is_valid():
                 form.save()
                 return redirect("posts-user")
@@ -139,7 +159,8 @@ def review_edit(request, review_id):
 
 @login_required
 def ticket_delete(request, ticket_id):
-    ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    """Suppression d'un de ses tickets."""
+    ticket = get_object_or_404(Ticket, id=ticket_id)
     if ticket.user == request.user:
         if request.method == "POST":
             ticket.delete()
@@ -154,7 +175,8 @@ def ticket_delete(request, ticket_id):
 
 @login_required
 def review_delete(request, review_id):
-    review = get_object_or_404(models.Review, id=review_id)
+    """Suppression d'une de ses reviews."""
+    review = get_object_or_404(Review, id=review_id)
     if review.user == request.user:
         if request.method == "POST":
             review.delete()
