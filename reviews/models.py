@@ -43,5 +43,8 @@ class Review(models.Model):
 
     time_created = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ("user", "ticket")
+
     def __str__(self):
-        return self.headline
+        return str((self.headline, self.ticket, self.user))

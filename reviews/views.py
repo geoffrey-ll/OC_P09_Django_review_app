@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import permission_required
 from django.shortcuts import get_object_or_404, redirect, render
 from itertools import chain
 
@@ -11,7 +10,8 @@ from .models import Ticket, Review
 
 
 MESSAGE_DENIED = "Accès refusé, car vous n'êtes pas l'auteur"
-MESSAGE_EXTRA_TAGS = "alert alert-primary bs-perso-message"
+TAGS_DENIED = "alert alert-primary bs-perso-message"
+MESSAGE_ALREADY_ANSWER = "Vous avez déjà publié une critique à ce ticket"
 
 
 @login_required
@@ -97,6 +97,12 @@ def review_ticket_answer(request, ticket_id):
     """Création d'une review en réponse à un ticket existant."""
     form = ReviewForm()
     ticket = Ticket.objects.get(id=ticket_id)
+    already_answer = Review.objects.filter(ticket=ticket)
+    if len(already_answer) != 0:
+        messages.error(request,
+                      MESSAGE_ALREADY_ANSWER)
+        return redirect("flux-user")
+
     if request.method == "POST":
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
@@ -110,11 +116,7 @@ def review_ticket_answer(request, ticket_id):
                            "post": ticket})
 
 
-# Un décorateur pour permettre l'accès qu'a son auteur ?
-# Ajouter {% if perms.reviews.change_ticket %} dans le HTML, là où doit
-# apparaître le boutton de modification.
 @login_required
-# @permission_required("reviews.change_ticket", raise_exception=True)
 def ticket_edit(request, ticket_id):
     """Édition d'un de ses tickets."""
     ticket = get_object_or_404(Ticket, id=ticket_id)
@@ -127,17 +129,13 @@ def ticket_edit(request, ticket_id):
                 return redirect("posts-user")
     else:
         messages.error(request, MESSAGE_DENIED,
-                       extra_tags=MESSAGE_EXTRA_TAGS)
+                       extra_tags=TAGS_DENIED)
         return redirect("flux-user")
     return render(request, "reviews/ticket_form.html",
                   context={"form": form, "option": "edit"})
 
 
-# Un décorateur pour permettre l'accès qu'a son auteur ?
-# Ajouter {% if perms.reviews.change_review %} dans le HTML, là où doit
-# apparaître le boutton de modification.
 @login_required
-# @permission_required("reviews.change_review", raise_exception=True)
 def review_edit(request, review_id):
     """Édition d'une de ses reviews."""
     review = get_object_or_404(Review, id=review_id)
@@ -151,7 +149,7 @@ def review_edit(request, review_id):
                 return redirect("posts-user")
     else:
         messages.error(request, MESSAGE_DENIED,
-                       extra_tags=MESSAGE_EXTRA_TAGS)
+                       extra_tags=TAGS_DENIED)
         return redirect("flux-user")
     return render(request, "reviews/ticket_answer.html",
                   context={"form": form, "post": ticket, "option": "edit"})
@@ -167,7 +165,7 @@ def ticket_delete(request, ticket_id):
             return redirect("posts-user")
     else:
         messages.error(request, MESSAGE_DENIED,
-                       extra_tags=MESSAGE_EXTRA_TAGS)
+                       extra_tags=TAGS_DENIED)
         return redirect("flux-user")
     return render(request, "reviews/delete_view.html",
                   context={"post": ticket, "delete": "ticket"})
@@ -183,7 +181,7 @@ def review_delete(request, review_id):
             return redirect("posts-user")
     else:
         messages.error(request, MESSAGE_DENIED,
-                       extra_tags=MESSAGE_EXTRA_TAGS)
+                       extra_tags=TAGS_DENIED)
         return redirect("flux-user")
     return render(request, "reviews/delete_view.html",
                   context={"post": review, "delete": "critique"})

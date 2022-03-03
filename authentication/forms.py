@@ -11,6 +11,7 @@ PLACEHOLDER_LIST = \
 
 
 class PasswordResetForm(forms.Form):
+    """Formulaire pour la réinitialisation du mot de passe."""
     username = forms.CharField()
 
     def __init__(self, *args, **kwargs):
@@ -18,8 +19,8 @@ class PasswordResetForm(forms.Form):
         fields_attribute(self.fields)
 
 
-
 def fields_attribute(fields, option="", placeholder=PLACEHOLDER_LIST):
+    """Modifications d'attributs des champs des formulaires."""
     if option == "FollowForm":
         field_class = "size-search-field"
     else:
@@ -32,6 +33,7 @@ def fields_attribute(fields, option="", placeholder=PLACEHOLDER_LIST):
 
 
 class SignupForm(UserCreationForm):
+    """Formulaire d'inscription."""
     class Meta(UserCreationForm.Meta):
         model = get_user_model()
 
@@ -41,24 +43,26 @@ class SignupForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
+    """Formulaire de connexion."""
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         fields_attribute(self.fields)
 
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
-
 
 class FollowForm(forms.Form):
+    """Formulaire pour suivre un utilisateur."""
+    username = forms.CharField(max_length=63, label='Nom d’utilisateur')
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         fields_attribute(self.fields, "FollowForm")
 
-    username = forms.CharField(max_length=63, label='Nom d’utilisateur')
-
 
 class PasswordChangeFormOverride(PasswordChangeForm):
-
+    """Formulaire de changement de mot de passe."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.placeholder_list =[]

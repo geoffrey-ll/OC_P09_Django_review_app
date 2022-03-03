@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -22,7 +23,12 @@ from .forms import FollowForm
 from .forms import PasswordResetForm
 from .forms import PasswordChangeFormOverride
 
+
 from . import tests
+
+
+MESSAGE_CANT_SIGNUP_WHEN_LOGGED = "Impossible de s'inscrire en étant connecté."
+TAGS_CANT_SIGNUP_WHEN_LOGGED = "alert alert-info bs-perso-message"
 
 
 # Create your views here
@@ -48,6 +54,10 @@ class PasswordChangeViewOverride(PasswordChangeView):
 
 
 def signup(request):
+    if request.user.is_authenticated:
+        messages.error(request, MESSAGE_CANT_SIGNUP_WHEN_LOGGED,
+                       extra_tags=TAGS_CANT_SIGNUP_WHEN_LOGGED)
+        return redirect(settings.LOGIN_REDIRECT_URL)
     form = SignupForm()
     if request.method == "POST":
         form = SignupForm(request.POST)

@@ -35,8 +35,7 @@ a.generic-buttonn {
 }
 
 .bs-perso-navbar-right {
-    display: flex;
-    min-width: 22.5%;
+    max-width: 22.5%;
 }
 
 .h2 {

@@ -4,6 +4,14 @@ from django import forms
 from .models import Ticket, Review
 
 
+def fields_attribute(fields, label_fields):
+    """Modifications d'attributs des champs des formulaires."""
+    for idx, field in enumerate(fields):
+        fields[field].widget.attrs.update(
+            {"class": "fields-margin"})
+        fields[field].label = label_fields[idx]
+
+
 class TicketForm(forms.ModelForm):
     """Formulaire pour les tickets."""
     label_fields = ["Titre", "Description", "Image"]
@@ -11,7 +19,6 @@ class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
         fields = ["title", "description", "image"]
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,11 +36,3 @@ class ReviewForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         fields_attribute(self.fields, self.label_fields)
-
-
-def fields_attribute(fields, label_fields):
-    """Modifications d'attributs des champs des formulaires."""
-    for idx, field in enumerate(fields):
-        fields[field].widget.attrs.update(
-            {"class": "fields-margin"})
-        fields[field].label = label_fields[idx]
