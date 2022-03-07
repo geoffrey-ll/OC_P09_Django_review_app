@@ -56,7 +56,7 @@ mdp : dddd__8888
 
 Depuis l'espace Admin, vous pourrez gérer la base de données, y copmpris les comptes déjà présents.
 
-Les mots de passe des autres comptes à pour format :\
+Les mots de passe des autres comptes ont pour format :\
 user : sarahj\
 mdp : sarahjsarahj
 
