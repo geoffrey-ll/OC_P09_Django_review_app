@@ -31,12 +31,14 @@ Application web pour demander et publier des critiques de livres ou d'articles.
 
 0. Depuis un terminal, rendez-vous à la racine du projet.
 
-1. Clonez ce dépôt à l'aide de la commande `$ git clone https://github.com/geoffrey-ll/P09_GL_LITReview` ou téléchargez-le [ici](https://github.com/geoffrey-ll/P09_GL_LITReview/archive/refs/heads/master.zip).
-Délacez le contenu du dépôt à la racine du projet.
+1. Clonez ce dépôt à l'aide de la commande \
+`$ git clone https://github.com/geoffrey-ll/P09_GL_LITReview .` ou téléchargez-le [ici](https://github.com/geoffrey-ll/P09_GL_LITReview/archive/refs/heads/master.zip).
 
-2. Créez un environnement virtuel avec `$ python -m venv env` sous Windows, ou `$python3 -m venv env` sous macOS et Linux.
+2. Créez un environnement virtuel avec `$ python -m venv env` sous Windows,\
+ou ```$ python3 -m venv env``` sous macOS et Linux.
 
-3. Activez l'environnement virtuel avec `$ env\Scripts\activate` sous Windows, ou `$ source env/bin/activate` sous macOS et Linux.
+3. Activez l'environnement virtuel avec `$ env\Scripts\activate` sous Windows, \
+ou `$ source env/bin/activate` sous macOS et Linux.
 
 4. Installez les dépendances du projet avec `$ pip install -r requirements.txt`
 
