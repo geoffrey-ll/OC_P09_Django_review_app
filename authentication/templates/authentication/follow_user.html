@@ -35,6 +35,8 @@
           </a>
         </td>
       </tr>
+    {% empty %}
+      <p>Vous n'avez aucun abonnement.</p>
     {% endfor %}
   </table>
 
@@ -44,6 +46,8 @@
       <tr>
         <td class="follow-cell follow-name">{{ following_user.user }}</td>
       </tr>
+    {% empty %}
+      <p>Vous n'êtes pas suivis.</p>
     {% endfor %}
   </table>
 
