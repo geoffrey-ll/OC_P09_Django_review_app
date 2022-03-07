@@ -4,12 +4,20 @@ from django import forms
 from .models import Review, Ticket
 
 
+RATINGS = [
+    ('0', '0'), ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')
+]
+
+
 def fields_attribute(fields, label_fields):
     """Modifications d'attributs des champs des formulaires."""
     for idx, field in enumerate(fields):
-        fields[field].widget.attrs.update(
-            {"class": "fields-margin"})
+        fields[field].widget.attrs.update({"class": "fields-margin"})
         fields[field].label = label_fields[idx]
+        if fields[field].label == "Note":
+            fields[field].widget.attrs.update(
+                {"class": "fields-margin rating-tag"}
+            )
 
 
 class TicketForm(forms.ModelForm):
@@ -19,6 +27,7 @@ class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
         fields = ["title", "description", "image"]
+        # widgets = {"description": forms.Textarea(attrs={"rows": 4})}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -32,6 +41,7 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ["headline", "rating", "body"]
+        widgets = {"rating": forms.RadioSelect(choices=RATINGS)}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -25,6 +25,8 @@
       {% else %}
         {% include 'reviews/review_view_snippet.html' %}
       {% endif %}
+    {% empty %}
+      <p></p>
     {% endfor %}
   </div>
 
