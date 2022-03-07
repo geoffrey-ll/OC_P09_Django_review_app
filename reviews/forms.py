@@ -1,7 +1,7 @@
 from django import forms
 
 
-from .models import Ticket, Review
+from .models import Review, Ticket
 
 
 def fields_attribute(fields, label_fields):

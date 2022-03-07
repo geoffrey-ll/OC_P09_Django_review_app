@@ -1,22 +1,10 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 
 
 PLACEHOLDER_LIST = \
     ["Nom d'utilisateur", "Mot de passe", "Confirmer mot de passe"]
-
-
-class PasswordResetForm(forms.Form):
-    """Formulaire pour la réinitialisation du mot de passe."""
-    username = forms.CharField()
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        fields_attribute(self.fields)
 
 
 def fields_attribute(fields, option="", placeholder=PLACEHOLDER_LIST):
@@ -65,7 +53,7 @@ class PasswordChangeFormOverride(PasswordChangeForm):
     """Formulaire de changement de mot de passe."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.placeholder_list =[]
+        self.placeholder_list = []
         for field in self.fields:
             self.placeholder_list.append(self.fields[field].label)
         fields_attribute(self.fields, placeholder=self.placeholder_list)

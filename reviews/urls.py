@@ -16,9 +16,9 @@ Including another URLconf
 from django.urls import path
 
 
-from reviews.views import flux_user, posts_user
-from reviews.views import ticked_upload, ticket_edit, ticket_delete
-from reviews.views import review_upload, review_edit, review_delete, \
+from .views import flux_user, posts_user
+from .views import ticked_upload, ticket_edit, ticket_delete
+from .views import review_upload, review_edit, review_delete, \
     review_ticket_answer
 
 

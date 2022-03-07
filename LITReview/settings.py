@@ -139,4 +139,3 @@ PASSWORD_CHANGE_DONE = ""
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = "media/"
-

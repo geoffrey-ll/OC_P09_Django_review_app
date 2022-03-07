@@ -5,13 +5,14 @@ from itertools import chain
 
 
 from authentication.models import UserFollow
-from .forms import TicketForm, ReviewForm
-from .models import Ticket, Review
+from .forms import ReviewForm, TicketForm
+from .models import Review, Ticket
 
 
 MESSAGE_DENIED = "Accès refusé, car vous n'êtes pas l'auteur"
 TAGS_DENIED = "alert alert-primary bs-perso-message"
 MESSAGE_ALREADY_ANSWER = "Vous avez déjà publié une critique à ce ticket"
+TAGS_ALREADY_ANSWER = "alert alert-info bs-perso-message"
 
 
 @login_required
@@ -97,10 +98,11 @@ def review_ticket_answer(request, ticket_id):
     """Création d'une review en réponse à un ticket existant."""
     form = ReviewForm()
     ticket = Ticket.objects.get(id=ticket_id)
-    already_answer = Review.objects.filter(ticket=ticket)
+    already_answer = Review.objects.filter(user=request.user, ticket=ticket)
     if len(already_answer) != 0:
         messages.error(request,
-                      MESSAGE_ALREADY_ANSWER)
+                       MESSAGE_ALREADY_ANSWER,
+                       extra_tags=TAGS_ALREADY_ANSWER)
         return redirect("flux-user")
 
     if request.method == "POST":

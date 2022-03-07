@@ -1,6 +1,5 @@
 from django.conf import settings
-from django.core.validators import MinValueValidator
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from PIL import Image
 
@@ -13,7 +12,7 @@ class Ticket(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to="ticket_images")
     time_created = models.DateTimeField(auto_now_add=True)
 
-    IMAGE_MAX_SIZE = (120, 160) # (largeur, hauteur)
+    IMAGE_MAX_SIZE = (120, 160)  # (largeur, hauteur)
 
     def _resize_image(self):
         image = Image.open(self.image)
@@ -26,9 +25,9 @@ class Ticket(models.Model):
             self._resize_image()
 
     def __str__(self):
-        return f"{self.user} a demandé une critique\n" \
-               f"{self.title}\n" \
-               f"{self.description}"
+        return f"{self.user} : \n" \
+               f"{self.title[:50]} : \n" \
+               f"{self.description[:30]}"
 
 
 class Review(models.Model):
