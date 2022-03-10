@@ -9,7 +9,12 @@
   </div>
 
   <div class="flexbox-start">
-    <p>{{ post.headline }} - {{ post.rating }} <div class="star"></div></p>
+    <p>{{ post.headline }}  -  </p>
+    <div class="star{% if post.rating < 1 %} star-invalid{% endif %}"></div>
+    <div class="star{% if post.rating < 2 %} star-invalid{% endif %}"></div>
+    <div class="star{% if post.rating < 3 %} star-invalid{% endif %}"></div>
+    <div class="star{% if post.rating < 4 %} star-invalid{% endif %}"></div>
+    <div class="star{% if post.rating < 5 %} star-invalid{% endif %}"></div>
   </div>
   {% if post.body %}
     <p>{{ post.body }}</p>
