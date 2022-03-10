@@ -8,8 +8,8 @@
     <p>{{ post.time_created }}</p>
   </div>
 
-  <div>
-    <p>{{ post.headline }} - Note : {{ post.rating }}</p>
+  <div class="flexbox-start">
+    <p>{{ post.headline }} - {{ post.rating }} <div class="star"></div></p>
   </div>
   {% if post.body %}
     <p>{{ post.body }}</p>
