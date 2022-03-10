@@ -2,46 +2,47 @@
 
 {% block content %}
 
-{% if not option %}
-  <h2>Créer une critique</h2>  
-{% elif option == "edit" %}
-  <h2>Modifier votre critique</h2>
-{% endif %}
+  {% if not option %}
+    <h2>Créer une critique</h2>  
+  {% elif option == "edit" %}
+    <h2>Modifier votre critique</h2>
+  {% endif %}
 
-<div class="flexbox-center flex-column">
-  <div class="separate-form">
-    <p><strong>Vous</strong> êtes en train de poster en réponse à</p>
-    <div class="flexbox-center">
-      {% include "reviews/ticket_view_snippet.html" with option="ticket-answer" %}
+  <div class="flexbox-center flex-column">
+    <div class="separate-form">
+      <p><strong>Vous</strong> êtes en train de poster en réponse à</p>
+      <div class="flexbox-center">
+        {% include "reviews/ticket_view_snippet.html" with option="ticket-answer" %}
+      </div>
+    </div>
+
+    <div class="separate-form border-top-none">
+      <p>Critique</p>
+      <form class="flexbox-center flex-column no-margin" method="post" enctype="mutipart/form-data">
+        {% csrf_token %}
+        
+        {% for field in form %}
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+            <div class="alert alert-info">{{ field.errors }}</div>
+          {% endif %}
+        {% endfor %}
+
+        <div class="flexbox-right">
+          <input class="button-margin-right generic-buttonn margin-10" type="submit" value="Envoyer">
+        </div>
+      </form>
     </div>
   </div>
 
-  <div class="separate-form border-top-none">
-    <p>Critique</p>
-    <form class="flexbox-center flex-column no-margin" method="post" enctype="mutipart/form-data">
-      {% csrf_token %}
-      
-      {% for field in form %}
-        {{ field.label_tag }}
-        {{ field }}
-        {% if field.errors %}
-          <div class="alert alert-info">{{ field.errors }}</div>
-        {% endif %}
-      {% endfor %}
-
-      <div class="flexbox-right">
-        <input class="button-margin-right generic-buttonn margin-10" type="submit" value="Envoyer">
-      </div>
-    </form>
+  <div class="flexbox-right">
+    <a href="
+    {% if option == 'edit' %}{% url 'posts-user' %}
+    {% else %}{% url 'flux-user' %}
+    {% endif %}">
+      <input class="button-margin-right generic-buttonn button-back" type="submit" value="Annuler">
+    </a>
   </div>
-</div>
-
-<div class="flexbox-right">
-  <a href="
-  {% if option == 'edit' %}{% url 'posts-user' %}
-  {% else %}{% url 'flux-user' %}
-  {% endif %}">
-    <input class="button-margin-right generic-buttonn button-back" type="submit" value="Annuler">
-  </a>
-</div>
+  
 {% endblock %}

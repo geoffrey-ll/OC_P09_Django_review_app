@@ -2,27 +2,25 @@
 
 {% block content %}
 
-<h2>Inscrivez-vous</h2>
+  <h2>Inscrivez-vous</h2>
+  <div class="flexbox-center">
+    <form class="flexbox-center flex-column size-little-fields" method="post">
+      {% csrf_token %}
 
+      {% for field in form %}
+        {{ field }}
+        {% if field.errors %}
+          <div class="alert alert-info">{{ field.errors }}</div>
+        {% endif %}
+      {% endfor %}
 
-<div class="flexbox-center">
-  <form class="flexbox-center flex-column size-little-fields" method="post">
-    {% csrf_token %}
-
-    {% for field in form %}
-      {{ field }}
-      {% if field.errors %}
-        <div class="alert alert-info">{{ field.errors }}</div>
-      {% endif %}
-    {% endfor %}
-
-    <div class="flexbox-right">
-      <a href="{% url 'home-page' %}" type="button">
-        <input class="fields-margin generic-buttonn" type="button" value="Retourner">
-      </a>
-      <input class="fields-margin generic-buttonn" type="submit" value="S'inscrire">
-    </div>
-  </form>
-</div>
+      <div class="flexbox-right">
+        <a href="{% url 'home-page' %}" type="button">
+          <input class="fields-margin generic-buttonn" type="button" value="Retourner">
+        </a>
+        <input class="fields-margin generic-buttonn" type="submit" value="S'inscrire">
+      </div>
+    </form>
+  </div>
   
 {% endblock %}

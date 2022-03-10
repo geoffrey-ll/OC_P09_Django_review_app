@@ -23,31 +23,19 @@
             <img src="http://127.0.0.1:8000/media/logo_litreview_no_text.png" alt="Logo de LITReview">
           </a>
           {% if user.is_superuser %}
-            <a class="navbar-brand" href="/admin">
-              Admin
-            </a>
+            <a class="navbar-brand" href="/admin">Admin</a>
           {% endif %}
         </div>
 
-
         <div class="navbar-nav bs-perso-navbar-central">
-          <a class="nav-item nav-link active" href="{% url 'home-page' %}">
-            LITReview
-          </a>
+          <a class="nav-item nav-link active" href="{% url 'home-page' %}">LITReview</a>
         </div>
 
-
-        <div id="navbarRight" class="collapse navbar-collapse navbar-nav bs-perso-navbar-right">
+        <div id="navbarRight" class="navbar-nav bs-perso-navbar-right">
           {% if user.is_authenticated %}
-            <a class="nav-item nav-link active" href="{% url 'flux-user' %}">
-              Flux
-            </a>
-            <a class="nav-item nav-link active" href="{% url 'posts-user' %}">
-              Posts
-            </a>
-            <a class="nav-item nav-link active" href="{% url 'follow-user' %}">
-              Abonnements
-            </a>
+            <a class="nav-item nav-link active" href="{% url 'flux-user' %}">Flux</a>
+            <a class="nav-item nav-link active" href="{% url 'posts-user' %}">Posts</a>
+            <a class="nav-item nav-link active" href="{% url 'follow-user' %}">Abonnements</a>
           {% endif %}
             <div class="nav-item dropdown">
               {% if user.is_authenticated %}
@@ -56,7 +44,6 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                   <a class="dropdown-item text-right" href="{% url 'logout' %}">Logout</a>
-                  <a class="dropdown-item text-right" href="">View Profile</a>
                   <a class="dropdown-item text-right" href="{% url 'password-change' %}">Change password</a>
                 </div>
               {% else %}
@@ -70,14 +57,10 @@
               {% endif %}
             </div>
         </div>
-
-        <button
-        class="navbar-toggler bs-perso-navbar-right" type="button" data-target="#navbarRight">
-          <span class="navbar-toggler-icon"></span>
-        </button>
         
       </div>
     </nav>
+
     <div class="container">
       <div class="jumbotron">
         {% for message in messages %}
@@ -86,8 +69,8 @@
           </p>
         {% endfor %}
         {% block content %}{% endblock %}
-
       </div>
     </div>
+
   </body>
 </html>

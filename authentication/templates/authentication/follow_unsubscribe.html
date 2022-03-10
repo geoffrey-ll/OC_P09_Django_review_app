@@ -6,9 +6,9 @@
     <p class="text-center">
       Veuillez confirmer le désabonnement à <strong>{{ follower_name }}</strong>
     </p>
+    
     <form class="flexbox-center" method="post">
       {% csrf_token %}
-      
       <input class="fields-margin generic-buttonn" type="submit" value="Désabonner">
     </form>
     

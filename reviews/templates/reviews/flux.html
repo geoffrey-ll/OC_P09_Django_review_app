@@ -25,8 +25,13 @@
       {% else %}
         {% include 'reviews/review_view_snippet.html' %}
       {% endif %}
+
     {% empty %}
-      <p></p>
+      {% if option == "posts-user" %}
+        <p>Vous n'avez rien publié.</p>
+      {% elif option == "flux-user" %}
+        <p>Publiez du contenu ou abonnez-vous à d'autres utilisateurs pour voir leur contenus ici.</p>
+      {% endif %}
     {% endfor %}
   </div>
 

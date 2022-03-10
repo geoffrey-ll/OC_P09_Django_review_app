@@ -2,40 +2,40 @@
 
 {% block content %}
 
-{% if not option %}
-  <h2>Créer un ticket</h2>
-{% elif option == "edit" %}
-  <h2>Modifier votre ticket</h2>
-{% endif %}
+  {% if not option %}
+    <h2>Créer un ticket</h2>
+  {% elif option == "edit" %}
+    <h2>Modifier votre ticket</h2>
+  {% endif %}
 
-<form class="flexbox-center flex-column" method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {% for field in form %}
-    {% if "image" in field.label_tag and form.instance.image.url %} 
-      <img src="{{ form.instance.image.url }}" alt="Image inexistante" height="160px" width="120px">
-      {{ field }}
-    {% else %}
-      {{ field.label_tag }}
-      {{ field }}
-    {% endif %}
+  <form class="flexbox-center flex-column" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+      {% if "image" in field.label_tag and form.instance.image.url %} 
+        <img src="{{ form.instance.image.url }}" alt="Image inexistante" height="160px" width="120px">
+        {{ field }}
+      {% else %}
+        {{ field.label_tag }}
+        {{ field }}
+      {% endif %}
 
-    {% if field.errors %}
-      <div class="alert alert-info">{{ field.errors }}</div>
-    {% endif %}
-  {% endfor %}
+      {% if field.errors %}
+        <div class="alert alert-info">{{ field.errors }}</div>
+      {% endif %}
+    {% endfor %}
+
+    <div class="flexbox-right">
+      <input class="button-margin-right generic-buttonn" type="submit" value="Envoyer">
+    </div>
+  </form>
 
   <div class="flexbox-right">
-    <input class="button-margin-right generic-buttonn" type="submit" value="Envoyer">
+    <a href="
+    {% if option == 'edit' %}{% url 'posts-user' %}
+    {% else %}{% url 'flux-user' %}
+    {% endif %}">
+      <input class="button-margin-right generic-buttonn" type="submit" value="Annuler">
+    </a>
   </div>
-</form>
-
-<div class="flexbox-right">
-  <a href="
-  {% if option == 'edit' %}{% url 'posts-user' %}
-  {% else %}{% url 'flux-user' %}
-  {% endif %}">
-    <input class="button-margin-right generic-buttonn" type="submit" value="Annuler">
-  </a>
-</div>
-
+  
 {% endblock %}

@@ -5,11 +5,11 @@
     {% else %}
       <p><strong>{{ post.user }}</strong> a publié une critique</p>
     {% endif %}
-
     <p>{{ post.time_created }}</p>
   </div>
+
   <div>
-    <p>{{ post.headline }} - {{ post.rating }}</p>
+    <p>{{ post.headline }} - Note : {{ post.rating }}</p>
   </div>
   {% if post.body %}
     <p>{{ post.body }}</p>

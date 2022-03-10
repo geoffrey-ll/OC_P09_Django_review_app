@@ -29,8 +29,7 @@
       <tr>
         <td class="follow-cell follow-name">{{ follower_name }}</td>
         <td class="follow-cell follow-button-container">
-          <a class="follow-a-button" 
-          href="{% url 'follow-unsubscribe' relation_user.id follower_name %}">
+          <a class="follow-a-button" href="{% url 'follow-unsubscribe' relation_user.id follower_name %}">
               <button class="follow-buttonn">Désabonner</button>
           </a>
         </td>

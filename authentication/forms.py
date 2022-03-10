@@ -8,7 +8,7 @@ PLACEHOLDER_LIST = \
 
 
 def fields_attribute(fields, option="", placeholder=PLACEHOLDER_LIST):
-    """Modifications d'attributs des champs des formulaires."""
+    """Modifications d'attributs des champs d'un formulaire."""
     if option == "FollowForm":
         field_class = "size-search-field"
     else:
@@ -23,9 +23,11 @@ def fields_attribute(fields, option="", placeholder=PLACEHOLDER_LIST):
 class SignupForm(UserCreationForm):
     """Formulaire d'inscription."""
     class Meta(UserCreationForm.Meta):
+        """Paramètres du formulaire."""
         model = get_user_model()
 
     def __init__(self, *args, **kwargs):
+        """Initialisation du formulaire."""
         super().__init__(*args, **kwargs)
         fields_attribute(self.fields)
 
@@ -36,6 +38,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
+        """Initialisation du formulaire."""
         super().__init__(*args, **kwargs)
         fields_attribute(self.fields)
 
@@ -45,6 +48,7 @@ class FollowForm(forms.Form):
     username = forms.CharField(max_length=63, label='Nom d’utilisateur')
 
     def __init__(self, *args, **kwargs):
+        """Initialisation du formulaire."""
         super().__init__(*args, **kwargs)
         fields_attribute(self.fields, "FollowForm")
 
@@ -52,6 +56,7 @@ class FollowForm(forms.Form):
 class PasswordChangeFormOverride(PasswordChangeForm):
     """Formulaire de changement de mot de passe."""
     def __init__(self, *args, **kwargs):
+        """Initialisation du formulaire."""
         super().__init__(*args, **kwargs)
         self.placeholder_list = []
         for field in self.fields:

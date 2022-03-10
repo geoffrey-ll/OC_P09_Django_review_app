@@ -7,7 +7,8 @@ from django.contrib.auth.views import PasswordChangeView
 from django.shortcuts import redirect, render
 
 
-from .forms import FollowForm, LoginForm, PasswordChangeFormOverride, SignupForm
+from .forms import \
+    FollowForm, LoginForm, PasswordChangeFormOverride, SignupForm
 from .models import UserFollow
 
 
@@ -19,11 +20,13 @@ TAGS_SUCCESS_SIGNUP = "alert alert-success bs-perso-message"
 
 # Create your views here
 class PasswordChangeViewOverride(PasswordChangeView):
+    """Pour la changement de mot de passe."""
     template_name = "authentication/password_change.html"
     form_class = PasswordChangeFormOverride
 
 
 def signup(request):
+    """Inscription à l'app."""
     if request.user.is_authenticated:
         messages.error(request, MESSAGE_CANT_SIGNUP_WHEN_LOGGED,
                        extra_tags=TAGS_CANT_SIGNUP_WHEN_LOGGED)
@@ -41,6 +44,7 @@ def signup(request):
 
 
 def login_view(request):
+    """Connexion à l'app."""
     if request.user.is_authenticated is True:
         return redirect("flux-user")
     form = LoginForm()
@@ -48,11 +52,9 @@ def login_view(request):
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
-            print(f"\nJe suis valid\n")
             user = authenticate(
                 username=form.cleaned_data["username"],
                 password=form.cleaned_data["password"])
-            print(f"\nuser:\n{user}\n")
             if user is not None:
                 login(request, user)
                 return redirect(settings.LOGIN_REDIRECT_URL)
@@ -65,6 +67,7 @@ def login_view(request):
 
 @login_required
 def follow_user(request):
+    """Pour s'abonner à un user. Listes des abonnements et des abonnés."""
     # Ceux suivit par l'user
     relations_user = UserFollow.objects\
         .filter(user=request.user).order_by("followed_user__username")
@@ -107,6 +110,7 @@ def follow_user(request):
 
 @login_required
 def follow_unsubscribe(request, relation_id, follower_name):
+    """Pour se désabonner d'un user."""
     follow_unsubscribe = UserFollow.objects.get(id=relation_id)
     if follow_unsubscribe.user == request.user:
         if request.method == "POST":
